@@ -1,0 +1,4 @@
+/* remove modal outline while focus*/
+.noOutlineX:focus {
+    outline: none;
+}

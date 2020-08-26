@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -18,7 +19,9 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
 
     /**
      * Where to redirect users after login.
@@ -35,5 +38,23 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Override custom logout
+     */
+    public function logout(Request $request) {
+        $this->performLogout($request);
+
+        $request->session()->invalidate();
+
+        return redirect()->route('login');
+    }
+
+    /**
+     * use user_name instead of email
+     */
+    public function username() {
+        return 'user_name';
     }
 }

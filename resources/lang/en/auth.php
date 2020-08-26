@@ -13,7 +13,8 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    // 'failed' => 'These credentials do not match our records.',
+    'failed' => 'Data user tidak terdapat pada database sistem.',
+    // 'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'throttle' => 'Terlalu banyak yang melakukan login. Mohon coba lagi sesaat lagi.',
 ];
