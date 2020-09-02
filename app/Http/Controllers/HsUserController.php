@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\MessageBag;
+use Yajra\Datatables\Datatables;
 
 class HsUserController extends MasterController {
 
@@ -71,12 +72,54 @@ class HsUserController extends MasterController {
     }
 
     /**
+     * list user management
+     */
+    public function index() {
+        $title = $this->getTitle('manage_user');
+
+        return view('user.index', compact('title'));
+    }
+
+    /**
+     * display list of user
+     */
+    public function displayData(Request $request) {
+        $rsUser = auth()->user()
+            ->latest()
+            ->where('is_admin', '!=', 'YES')
+            ->get();
+
+        return Datatables::of($rsUser)
+            ->addIndexColumn()
+            ->addColumn('action', function ($user) {
+                $btn = "<a href='javascript:void(0)' class='btn btn-info btn-sm'>Lihat</a>";
+                $btn .= " <a href='javascript:void(0)' class='btn btn-warning btn-sm'>Ubah</a>";
+                $btn .= " <a href='javascript:void(0)' class='btn btn-danger btn-sm'>Hapus</a>";
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    /**
+     * display create user view
+     */
+    public function create() {
+        $title = $this->getTitle('create_user');
+
+        return view('user.create', compact('title'));
+    }
+
+    /**
      * get route by prefix
      */
     public function getRoute($key, $id = null) {
         switch ($key) {
             case 'profile':
                 return route('user.profile');
+            case 'index':
+                return route('user.index');
             default:
                 break;
         }

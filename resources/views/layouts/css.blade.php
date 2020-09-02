@@ -3,3 +3,12 @@
 {!! Html::style('assets/fontawesome-free/css/all.min.css') !!}
 {!! Html::style('assets/css/sb-admin-2.min.css') !!}
 {!! Html::style('css/common.css') !!}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.dataTables.min.css">
+
+<style>
+    .btn:hover {
+        cursor: pointer;
+    }
+</style>

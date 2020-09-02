@@ -26,8 +26,27 @@ Route::get('/logout', function() {
 });
 
 // user profile routing
-Route::get('/profile', 'HsUserController@getProfile')->name('user.profile');
-Route::post('/save_profile', 'HsUserController@saveProfile')->name('user.save_profile');
+
+// manage user module
+Route::prefix('/manage_user')->group(function() {
+    Route::get('/profile', 'HsUserController@getProfile')->name('manage.user.profile');
+    Route::post('/save_profile', 'HsUserController@saveProfile')->name('manage.user.save_profile');
+
+    // manage admin route
+    Route::group(['middleware' => 'can:is-admin'], function() {
+        Route::get('/', 'HsUserController@index')->name('manage.user');
+        Route::get('/list', 'HsUserController@displayData')->name('manage.user.list');
+        Route::get('/create', 'HsUserController@create')->name('manage.user.create');
+    });
+});
+
+// manage item module
+
+// manage supplier module
+
+// manage purchase module
+
+// manage invoice module
 
 // home routing
 Route::get('/home', 'HomeController@index')->name('home');

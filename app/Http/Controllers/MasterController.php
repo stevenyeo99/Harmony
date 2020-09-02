@@ -25,6 +25,12 @@ class MasterController extends Controller {
             case 'profile':
                 $title = "Profil User";
                 break;
+            case 'manage_user':
+                $title = "Manajemen User";
+                break;
+            case 'create_user':
+                $title = "Buat User";
+                break;
             default:
                 return '';
         }

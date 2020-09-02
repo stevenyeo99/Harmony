@@ -83,7 +83,7 @@
 
     @if(Gate::allows('is-admin'))
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('manage.user') }}">
                 <i class="fas fa-users"></i>
                 <span>User</span>
             </a>

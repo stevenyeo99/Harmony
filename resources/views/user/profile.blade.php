@@ -10,7 +10,7 @@
             </div>
 
             <div class="card-body">
-                {{ Form::open(array('url' => route('user.save_profile'), 'method' => 'POST', 'id' => 'frm')) }}
+                {{ Form::open(array('url' => route('manage.user.save_profile'), 'method' => 'POST', 'id' => 'frm')) }}
                     @csrf
                     <div class="form-group form-inline">
                         {{ Form::label('user_name', 'User Name :', array('class' => 'col-sm-2 d-inline-block pl-0')) }}

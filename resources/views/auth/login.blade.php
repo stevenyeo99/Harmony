@@ -18,7 +18,7 @@
                                     <form action="{{ route('login') }}" method="POST" class="user">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" id="user_name" name="user_name" value="{{ old('user_name') }}" placeholder="Enter User Name..." max="50">
+                                            <input type="text" class="form-control form-control-user" id="user_name" name="user_name" value="{{ old('user_name') }}" placeholder="Isi User Name..." max="50">
                                             @if ($errors->has('user_name'))
                                                 <span class="text-danger text-xs">
                                                     <strong>{{ $errors->first('user_name') }}</strong>
@@ -38,7 +38,7 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" {{ old('remember') ? 'checked' : '' }} class="custom-control-input" id="remember" name="remember">
-                                                <label class="custom-control-label" for="remember">Remember Me</label>
+                                                <label class="custom-control-label" for="remember">Ingat Saya</label>
                                             </div>
                                         </div>
 
@@ -50,7 +50,7 @@
                                     <hr>
                                     
                                     <div class="text-center">
-                                        <a class="small" href="{{ route('password.request') }}">Forgot Password?</a>
+                                        <a class="small" href="{{ route('password.request') }}">Lupa Password?</a>
                                     </div>
                                 </div>
                             </div>

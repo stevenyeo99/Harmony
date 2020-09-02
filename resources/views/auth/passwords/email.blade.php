@@ -20,14 +20,14 @@
                                     @endif
 
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-2">Forgot Your Password?</h1>
-                                        <p class="mb-4">We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!</p>
+                                        <h1 class="h4 text-gray-900 mb-2">Lupa Password Anda?</h1>
+                                        <p class="mb-4">Tidak masalah, isi email pengguna anda dan kami akan mengirimkan reset password anda melalui email!</p>
                                     </div>
 
                                     <form class="user" method="POST" action="{{ route('password.email') }}">
                                         @csrf
                                         <div class="form-group">
-                                            <input type="email" id="email" name="email" class="form-control form-control-user" placeholder="Enter Email Address..." required>
+                                            <input type="email" id="email" name="email" class="form-control form-control-user" placeholder="Isi Email Address..." required>
                                         </div>
                                         @if ($errors->has('email'))
                                             <span class="text-danger text-xs">
@@ -39,7 +39,7 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="{{ route('login') }}">Already have an account? Login!</a>
+                                        <a class="small" href="{{ route('login') }}">Sudah punya akun? Login!</a>
                                     </div>
                                 </div>
                             </div>
