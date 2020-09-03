@@ -92,7 +92,7 @@ class HsUserController extends MasterController {
         return Datatables::of($rsUser)
             ->addIndexColumn()
             ->addColumn('action', function ($user) {
-                $btn = "<a href='javascript:void(0)' class='btn btn-info btn-sm'>Lihat</a>";
+                $btn = "<a href='" . $this->getRoute('view', $user->user_id) . "' class='btn btn-info btn-sm'>Lihat</a>";
                 $btn .= " <a href='javascript:void(0)' class='btn btn-warning btn-sm'>Ubah</a>";
                 $btn .= " <a href='javascript:void(0)' class='btn btn-danger btn-sm'>Hapus</a>";
 
@@ -112,14 +112,84 @@ class HsUserController extends MasterController {
     }
 
     /**
+     * insert new user
+     */
+    public function store(Request $request) {
+        $data = Input::all();
+
+        $hsUser = new HsUser();
+
+        if ($hsUser->validate($hsUser, $data, $hsUser->messages('validation'))) {
+            DB::beginTransaction();
+
+            try {
+                $hsUser->user_name = $data['user_name'];
+                $hsUser->email = $data['email'];
+                $hsUser->phone = $data['phone'];
+                $hsUser->password = Hash::make($data['password']);
+                $hsUser->created_by = Auth()->user()->user_id;
+                $hsUser->is_admin = "NO";
+                $hsUser->status = "ACTIVE";
+
+                $hsUser->save();
+
+                DB::commit();
+
+                $this->setFlashMessage('success', $hsUser->messages('success', 'create'));
+                return redirect($this->getRoute('index'));
+            } catch (\Exception $e) {
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('create'), $e);
+                DB::rollback();
+            }
+        } else {
+            $errors = $hsUser->errors();
+            return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('create'), $errors);
+        }
+    }
+
+    /**
+     * edit
+     */
+    public function edit() {
+
+    }
+
+    /**
+     * update
+     */
+    public function update() {
+
+    }
+
+    /**
+     * delete
+     */
+    public function delete() {
+
+    }
+
+    public function view($id) {
+        $userModel = new HsUser();
+        $userObj = $userModel::find($id);
+        
+        $title = $this->getTitle('view_user');
+
+        return view('user.view', compact('title', 'userObj'));
+    }
+
+    /**
      * get route by prefix
      */
     public function getRoute($key, $id = null) {
         switch ($key) {
             case 'profile':
-                return route('user.profile');
+                return route('manage.user.profile');
             case 'index':
-                return route('user.index');
+                return route('manage.user');
+            case 'create':
+                return route('manage.user.create');
+            case 'view':
+                return route('manage.user.view', $id);
             default:
                 break;
         }

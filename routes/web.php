@@ -37,6 +37,8 @@ Route::prefix('/manage_user')->group(function() {
         Route::get('/', 'HsUserController@index')->name('manage.user');
         Route::get('/list', 'HsUserController@displayData')->name('manage.user.list');
         Route::get('/create', 'HsUserController@create')->name('manage.user.create');
+        Route::post('/create', 'HsUserController@store')->name('manage.user.store');
+        Route::get('/view/{id}', 'HsUserController@view')->name('manage.user.view');
     });
 });
 

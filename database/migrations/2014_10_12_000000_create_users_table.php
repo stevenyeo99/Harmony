@@ -22,7 +22,6 @@ class CreateUsersTable extends Migration
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->string('is_admin', 10);
-            $table->string('permission_type', 20);
             $table->string('status', 10);
             $table->rememberToken();
             $table->timestamps();

@@ -31,6 +31,9 @@ class MasterController extends Controller {
             case 'create_user':
                 $title = "Buat User";
                 break;
+            case 'view_user':
+                $title = "Detail User";
+                break;
             default:
                 return '';
         }

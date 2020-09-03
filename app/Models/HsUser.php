@@ -16,7 +16,7 @@ class HsUser extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'user_name', 'email', 'phone', 'password', 'is_admin', 'permission_type', 'status'
+        'user_name', 'email', 'phone', 'password', 'is_admin', 'status'
     ];
 
     /**
