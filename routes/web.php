@@ -39,16 +39,31 @@ Route::prefix('/manage_user')->group(function() {
         Route::get('/create', 'HsUserController@create')->name('manage.user.create');
         Route::post('/create', 'HsUserController@store')->name('manage.user.store');
         Route::get('/view/{id}', 'HsUserController@view')->name('manage.user.view');
+        Route::get('/edit/{id}', 'HsUserController@edit')->name('manage.user.edit');
+        Route::post('/update/{id}', 'HsUserController@update')->name('manage.user.update');
+        Route::post('/delete/{id}', 'HsUserController@delete')->name('manage.user.delete');
     });
 });
 
 // manage item module
+Route::prefix('/manage_item')->group(function() {
+
+});
 
 // manage supplier module
+Route::prefix('/manage_supplier')->group(function() {
+
+});
 
 // manage purchase module
+Route::prefix('/manage_purchase')->group(function() {
+
+});
 
 // manage invoice module
+Route::prefix('/manage_invoice')->group(function() {
+
+});
 
 // home routing
 Route::get('/home', 'HomeController@index')->name('home');

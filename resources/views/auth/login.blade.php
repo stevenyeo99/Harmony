@@ -28,7 +28,7 @@
 
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="*********************" max="20">
-                                            @if ($errors->has('user_name'))
+                                            @if ($errors->has('password'))
                                                 <span class="text-danger text-xs">
                                                     <strong>{{ $errors->first('password') }}</strong>
                                                 </span>

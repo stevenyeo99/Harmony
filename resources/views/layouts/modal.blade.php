@@ -3,16 +3,16 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Siap untuk keluar ?</h5>
                 <button class="close noOutlineX" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
 
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-body">Pilih tombol "Logout" jika anda ingin mengakhiri session pada halaman ini.</div>
             
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <input type="submit" value="Logout" class="btn btn-primary">
@@ -49,6 +49,24 @@
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Tidak</button>
                 <a class="btn btn-success" href="{{ url()->previous() }}">Yakin</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- delete modal -->
+<div class="modal fade" id="deleteModal" tabIndex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Apakah anda yakin ingin non-aktifkan data berikut ?
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Tidak</button>
+                {!! Form::open(array('id' => 'frmModalDelete', 'method' => 'POST')) !!}
+                    <input id="btnDelConfirm" type="button" value="Yakin" class="btn btn-success">
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

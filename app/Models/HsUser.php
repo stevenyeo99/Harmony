@@ -40,6 +40,9 @@ class HsUser extends Authenticatable
 
     protected $primaryKey = "user_id";
 
+    // just for case profile purpose
+    public $is_profile;
+
     /**
      * user has many supplier log
      */
@@ -149,13 +152,18 @@ class HsUser extends Authenticatable
      */
     public function rules(HsUser $hsUser) {
         if (isset($hsUser->user_id)) {
-            return [
+            $arrRules = [
                 'user_name' => 'required|min:5|max:50|unique:hs_user,user_name,'.$hsUser->user_id.',user_id',
                 'email' => 'required|email|max:50|unique:hs_user,email,'.$hsUser->user_id.',user_id',
                 'phone' => 'required|min:12|max:50',
                 'password' => 'required|max:15|confirmed',
-                'g-recaptcha-response' => 'required|captcha',
             ];
+
+            if (isset($hsUser->is_profile) == 'YES') {
+                $arrRules['g-recaptcha-response'] = 'required|captcha';
+            }
+            
+            return $arrRules;
         } else {
             return [
                 'user_name' => 'required|min:5|max:50|unique:hs_user',

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\MessageBag;
 use Yajra\Datatables\Datatables;
+use App\Enums\StatusType;
+use App\Enums\UserType;
 
 class HsUserController extends MasterController {
 
@@ -43,6 +45,8 @@ class HsUserController extends MasterController {
         // get current user session
         $hsUser = auth()->user();
 
+        $hsUser->is_profile = 'YES';
+
         // validate form
         if($hsUser->validate($hsUser, $data, $hsUser->messages('validation'))) {
             DB::beginTransaction();
@@ -51,6 +55,7 @@ class HsUserController extends MasterController {
                 $hsUser->email = $data['email'];
                 $hsUser->phone = $data['phone'];
                 $hsUser->password = Hash::make($data['password']);
+                $hsUser->updated_at = now();
 
                 $hsUser->save();
 
@@ -77,7 +82,9 @@ class HsUserController extends MasterController {
     public function index() {
         $title = $this->getTitle('manage_user');
 
-        return view('user.index', compact('title'));
+        $ddlStatus = StatusType::getStrings();
+
+        return view('user.index', compact('title', 'ddlStatus'));
     }
 
     /**
@@ -86,19 +93,30 @@ class HsUserController extends MasterController {
     public function displayData(Request $request) {
         $rsUser = auth()->user()
             ->latest()
-            ->where('is_admin', '!=', 'YES')
-            ->get();
-
+            ->where('is_admin', '!=', UserType::IsAdmin)
+            ->select(['user_id', 'user_name', 'email', 'status']);
+    
         return Datatables::of($rsUser)
-            ->addIndexColumn()
             ->addColumn('action', function ($user) {
                 $btn = "<a href='" . $this->getRoute('view', $user->user_id) . "' class='btn btn-info btn-sm'>Lihat</a>";
-                $btn .= " <a href='javascript:void(0)' class='btn btn-warning btn-sm'>Ubah</a>";
-                $btn .= " <a href='javascript:void(0)' class='btn btn-danger btn-sm'>Hapus</a>";
+                $btn .= " <a href='" . $this->getRoute('edit', $user->user_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
+                $btn .= " <button class='btn btn-danger btn-sm dlt-btn' onclick='trigDeleteModalBtn(\"".$this->getRoute("delete", $user->user_id)."\");'>Hapus</button>";
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->editColumn('status', function($user) {
+                $label = "<span class='badge badge-success'>".$user->status."</span>";
+
+                if ($user->status == 'INACTIVE') {
+                    $label = "<span class='badge badge-danger'>".$user->status."</span>";
+                }
+
+                return $label;
+            })
+            ->filterColumn('status', function($query, $keyword) {
+                $query->where('status', $keyword);
+            })
+            ->rawColumns(['action', 'status'])
             ->make(true);
     }
 
@@ -128,8 +146,9 @@ class HsUserController extends MasterController {
                 $hsUser->phone = $data['phone'];
                 $hsUser->password = Hash::make($data['password']);
                 $hsUser->created_by = Auth()->user()->user_id;
-                $hsUser->is_admin = "NO";
-                $hsUser->status = "ACTIVE";
+                $hsUser->is_admin = UserType::NoAdmin;
+                $hsUser->status = StatusType::ACTIVE;
+                $hsUser->created_at = now();
 
                 $hsUser->save();
 
@@ -138,8 +157,8 @@ class HsUserController extends MasterController {
                 $this->setFlashMessage('success', $hsUser->messages('success', 'create'));
                 return redirect($this->getRoute('index'));
             } catch (\Exception $e) {
-                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('create'), $e);
                 DB::rollback();
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('create'), $e);
             }
         } else {
             $errors = $hsUser->errors();
@@ -150,22 +169,70 @@ class HsUserController extends MasterController {
     /**
      * edit
      */
-    public function edit() {
+    public function edit($id) {
+        $userObj = HsUser::find($id);
 
+        $title = $this->getTitle('edit_user');
+
+        return view('user.edit', compact('title', 'userObj'));
     }
 
     /**
      * update
      */
-    public function update() {
+    public function update(Request $request, $id) {
+        $data = Input::all();
 
+        $hsUser = HsUser::find($id);
+
+        $data['user_id'] = $id;
+
+        if ($hsUser->validate($hsUser, $data, $hsUser->messages('validation'))) {
+            try {
+                DB::beginTransaction();
+
+                // set the bean
+                $hsUser->user_name = $data['user_name'];
+                $hsUser->email = $data['email'];
+                $hsUser->phone = $data['phone'];
+                $hsUser->password = Hash::make($data['password']);
+                $hsUser->status = StatusType::ACTIVE;
+                $hsUser->updated_at = now();
+                $hsUser->save();
+
+                DB::commit();
+                $this->setFlashMessage('success', $hsUser->messages('success', 'update'));
+                return redirect($this->getRoute('index'));
+            } catch (\Exception $e) {
+                DB::rollback();
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit', $id), $e);
+            }
+        } else {
+            $errors = $hsUser->errors();
+            return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('edit', $id), $errors);
+        }
     }
 
     /**
-     * delete
+     * delete (mean not delete but terminating status into inactive only)
      */
-    public function delete() {
+    public function delete(Request $request, $id) {
+        try {
+            DB::beginTransaction();
 
+            $hsUser = HsUser::find($id);
+            $hsUser->status = StatusType::INACTIVE;
+            $hsUser->updated_at = now();
+            $hsUser->save();
+
+            DB::commit();
+            
+            $this->setFlashMessage('success', $hsUser->messages('success', 'delete'));
+            return redirect($this->getRoute('index'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('index'), $e);
+        }
     }
 
     public function view($id) {
@@ -190,6 +257,10 @@ class HsUserController extends MasterController {
                 return route('manage.user.create');
             case 'view':
                 return route('manage.user.view', $id);
+            case 'edit':
+                return route('manage.user.edit', $id);
+            case 'delete':
+                return route('manage.user.delete', $id);
             default:
                 break;
         }

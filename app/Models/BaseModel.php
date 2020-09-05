@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Validator;
 
 class BaseModel extends Model {
 
+    // disabled auto fill timestamp field
+    public $timestamps = false;
+
     /**
      * Validate data with optional custom messages.
      */

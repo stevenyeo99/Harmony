@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\Models\HsUser;
+use App\Enums\StatusType;
 
 class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Login Controller
+| Login Controller
     |--------------------------------------------------------------------------
     |
     | This controller handles authenticating users for the application and
@@ -56,5 +58,34 @@ class LoginController extends Controller
      */
     public function username() {
         return 'user_name';
+    }
+
+    /**
+     * send failed login validation message
+     */
+    public function sendFailedLoginResponse(Request $request) {
+        if (HsUser::where('user_name', $request->user_name)->where('status', StatusType::INACTIVE)->first()) {
+            return redirect()->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors([
+                    $this->username() => trans('auth.inactive'),
+                ]);
+        }
+        
+        if (!HsUser::where('user_name', $request->user_name)->first()) {
+            return redirect()->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors([
+                    $this->username() => trans('auth.user_name'),
+                ]);
+        }
+
+        if (!HsUser::where('user_name', $request->user_name)->where('password', bcrypt($request->password))->first()) {
+            return redirect()->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors([
+                    'password' => trans('auth.password'),
+                ]);
+        }
     }
 }
