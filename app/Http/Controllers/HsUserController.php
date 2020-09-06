@@ -82,9 +82,11 @@ class HsUserController extends MasterController {
     public function index() {
         $title = $this->getTitle('manage_user');
 
+        $userActive = "active";
+
         $ddlStatus = StatusType::getStrings();
 
-        return view('user.index', compact('title', 'ddlStatus'));
+        return view('user.index', compact('title', 'ddlStatus', 'userActive'));
     }
 
     /**
@@ -126,7 +128,9 @@ class HsUserController extends MasterController {
     public function create() {
         $title = $this->getTitle('create_user');
 
-        return view('user.create', compact('title'));
+        $userActive = "active";
+
+        return view('user.create', compact('title', 'userActive'));
     }
 
     /**
@@ -174,7 +178,9 @@ class HsUserController extends MasterController {
 
         $title = $this->getTitle('edit_user');
 
-        return view('user.edit', compact('title', 'userObj'));
+        $userActive = "active";
+
+        return view('user.edit', compact('title', 'userObj', 'userActive'));
     }
 
     /**
@@ -241,7 +247,9 @@ class HsUserController extends MasterController {
         
         $title = $this->getTitle('view_user');
 
-        return view('user.view', compact('title', 'userObj'));
+        $userActive = "active";
+
+        return view('user.view', compact('title', 'userObj', 'userActive'));
     }
 
     /**

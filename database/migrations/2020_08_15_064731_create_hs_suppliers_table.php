@@ -17,6 +17,7 @@ class CreateHsSuppliersTable extends Migration
             $table->increments('splr_id');
             $table->string('code', 10)->unique();
             $table->string('name', 100);
+            $table->string('email', 50)->unique()->nullable();
             $table->string('address_line_1', 100);
             $table->string('address_line_2', 100)->nullable();
             $table->string('address_line_3', 100)->nullable();
