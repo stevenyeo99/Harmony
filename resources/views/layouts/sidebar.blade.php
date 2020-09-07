@@ -74,8 +74,8 @@
         </a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item {{ isset($supplierActive) ? $supplierActive : '' }}">
+        <a class="nav-link" href="{{ route('manage.supplier') }}">
             <i class="fas fa-address-book"></i>
             <span>Supplier</span>
         </a>

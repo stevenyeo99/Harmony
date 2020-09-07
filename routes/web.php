@@ -45,15 +45,23 @@ Route::prefix('/manage_user')->group(function() {
     });
 });
 
+// manage supplier module
+Route::prefix('/manage_supplier')->group(function() {
+    Route::get('/', 'HsSupplierController@index')->name('manage.supplier');
+    Route::get('/list', 'HsSupplierController@displayData')->name('manage.supplier.list');
+    Route::get('/create', 'HsSupplierController@create')->name('manage.supplier.create');
+    Route::post('/create', 'HsSupplierController@store')->name('manage.supplier.store');
+    Route::get('/view/{id}', 'HsSupplierController@view')->name('manage.user.view');
+        Route::get('/edit/{id}', 'HsSupplierController@edit')->name('manage.user.edit');
+        Route::post('/update/{id}', 'HsSupplierController@update')->name('manage.user.update');
+        Route::post('/delete/{id}', 'HsSupplierController@delete')->name('manage.user.delete');
+});
+
 // manage item module
 Route::prefix('/manage_item')->group(function() {
 
 });
 
-// manage supplier module
-Route::prefix('/manage_supplier')->group(function() {
-
-});
 
 // manage purchase module
 Route::prefix('/manage_purchase')->group(function() {

@@ -222,7 +222,7 @@ class HsUserController extends MasterController {
     /**
      * delete (mean not delete but terminating status into inactive only)
      */
-    public function delete(Request $request, $id) {
+    public function delete($id) {
         try {
             DB::beginTransaction();
 

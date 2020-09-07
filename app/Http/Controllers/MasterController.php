@@ -37,6 +37,18 @@ class MasterController extends Controller {
             case 'edit_user':
                 $title = "Edit User";
                 break;
+            case 'manage_supplier':
+                $title = "Manajemen Supplier";
+                break;
+            case 'create_supplier':
+                $title = "Buat Supplier";
+                break;
+            case 'view_supplier':
+                $title = "Detail Supplier";
+                break;
+            case 'edit_supplier':
+                $title = "Edit Supplier";
+                break;
             default:
                 return '';
         }
