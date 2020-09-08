@@ -92,40 +92,55 @@ class HsSupplier extends BaseModel
      * rules of hs supplier module
      */
     public function rules(HsSupplier $hsSupplier) {
+        $rule = [];
         if (isset($hsSupplier->splr_id)) {
-            return [
-                'code' => 'required|min:10|max:10|unique:hs_supplier,code,'.$hsSupplier->splr_id.',splr_id',
-                'name' => 'required|min:3|max:50',
-                'email' => 'email|max:50|unique:hs_supplier,email,'.$hsSupplier->splr_id.',splr_id',
-                'address_line_1' => 'required|max:100',
-                'address_line_2' => 'max:100',
-                'address_line_3' => 'max:100',
-                'address_line_4' => 'max:100',
-                'telp_no' => 'required|min:5|max:20',
-                'contact_person_1' => 'required|min:12|max:20',
-                'contact_person_2' => 'min:12|max:20',
-                'contact_person_3' => 'min:12|max:20',
-                'contact_name_1' => 'required|min:3|max:50',
-                'contact_name_2' => 'min:3|max:50',
-                'contact_name_3' => 'min:3|max:50',
-            ];
+            $rule['code'] = 'required|min:10|max:10|unique:hs_supplier,code,'.$hsSupplier->splr_id.',splr_id';
         } else {
-            return [
-                'code' => 'required|min:10|max:10|unique:hs_supplier',
-                'name' => 'required|min:3|max:50',
-                'email' => 'email|max:50|unique:hs_supplier',
-                'address_line_1' => 'required|max:100',
-                'address_line_2' => 'max:100',
-                'address_line_3' => 'max:100',
-                'address_line_4' => 'max:100',
-                'telp_no' => 'required|min:5|max:20',
-                'contact_person_1' => 'required|min:12|max:20',
-                'contact_person_2' => 'min:12|max:20',
-                'contact_person_3' => 'min:12|max:20',
-                'contact_name_1' => 'required|min:3|max:50',
-                'contact_name_2' => 'min:3|max:50',
-                'contact_name_3' => 'min:3|max:50',
-            ];
+            $rule['code'] = 'required|min:10|max:10|unique:hs_supplier';
         }
+
+        $rule['name'] = 'required|min:3|max:50';
+
+        if (isset($hsSupplier->email)) {
+            if (isset($hsSupplier->splr_id)) {
+                $rule['email'] = 'email|max:50|unique:hs_supplier,email,'.$hsSupplier->splr_id.',splr_id';
+            } else {
+                $rule['email'] = 'email|max:50|unique:hs_supplier';
+            }
+        }
+
+        $rule['telp_no'] = 'required|min:5|max:20';
+        $rule['contact_name_1'] = 'required|min:3|max:50';
+        $rule['contact_person_1'] = 'required|min:12|max:20';
+        
+        if (isset($hsSupplier->contact_name_2) || isset($hsSupplier->contact_person_2)) {
+            array_push($rule, [
+                'contact_name_2' => 'min:3|max:50',
+                'contact_person_2' => 'min:12|max:20',
+            ]);
+        }
+
+        if (isset($hsSupplier->contact_name_3) || isset($hsSupplier->contact_person_3)) {
+            array_push($rule, [
+                'contact_name_3' => 'min:3|max:50',
+                'contact_person_3' => 'min:12|max:20',
+            ]);
+        }
+
+        $rule['address_line_1'] = 'required|max:100';
+
+        if (isset($hsSupplier->address_line_2)) {
+            $rule['address_line_2'] = 'max:100';
+        }
+
+        if (isset($hsSupplier->address_line_3)) {
+            $rule['address_line_3'] = 'max:100';
+        }
+
+        if (isset($hsSupplier->address_line_4)) {
+            $rule['address_line_4'] = 'max:100';
+        }
+
+        return $rule;
     }
 }
