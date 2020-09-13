@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Yajra\Datatables\Datatables;
 use App\Enums\StatusType;
+use App\Enums\ActionType;
 
 class HsSupplierController extends MasterController
 {
@@ -33,8 +34,7 @@ class HsSupplierController extends MasterController
      * display data on datatables
      */
     public function displayData(Request $request) {
-        $rsSupplier = HsSupplier::orderBy('code', 'asc')
-            ->select(['splr_id', 'code', 'name', 'email', 'status']);
+        $rsSupplier = HsSupplier::select(['splr_id', 'code', 'name', 'email', 'status']);
 
         return DataTables::of($rsSupplier)
             ->addColumn('action', function($supplier) {
@@ -93,30 +93,31 @@ class HsSupplierController extends MasterController
 
         $hsSupplier = new HsSupplier();
 
+        $hsSupplier->code = $this->generateSupplierCode();
+        $hsSupplier->name = $data['name'];
+        $hsSupplier->email = $data['email'];
+        $hsSupplier->telp_no = $data['telp_no'];
+        $hsSupplier->contact_name_1 = $data['contact_name_1'];
+        $hsSupplier->contact_person_1 = $data['contact_person_1'];
+        $hsSupplier->contact_name_2 = $data['contact_name_2'];
+        $hsSupplier->contact_person_2 = $data['contact_person_2'];
+        $hsSupplier->contact_name_3 = $data['contact_name_3'];
+        $hsSupplier->contact_person_3 = $data['contact_person_3'];
+        $hsSupplier->address_line_1 = $data['address_line_1'];
+        $hsSupplier->address_line_2 = $data['address_line_2'];
+        $hsSupplier->address_line_3 = $data['address_line_3'];
+        $hsSupplier->address_line_4 = $data['address_line_4'];
+        $hsSupplier->status = StatusType::ACTIVE;
+
         if ($hsSupplier->validate($hsSupplier, $data, $hsSupplier->messages('validation'))) {
             try {
                 DB::beginTransaction();
-
-                $hsSupplier->code = $this->generateSupplierCode();
-                $hsSupplier->name = $data['name'];
-                $hsSupplier->email = $data['email'];
-                $hsSupplier->telp_no = $data['telp_no'];
-                $hsSupplier->contact_name_1 = $data['contact_name_1'];
-                $hsSupplier->contact_person_1 = $data['contact_person_1'];
-                $hsSupplier->contact_name_2 = $data['contact_name_2'];
-                $hsSupplier->contact_person_2 = $data['contact_person_2'];
-                $hsSupplier->contact_name_3 = $data['contact_name_3'];
-                $hsSupplier->contact_person_3 = $data['contact_person_3'];
-                $hsSupplier->address_line_1 = $data['address_line_1'];
-                $hsSupplier->address_line_2 = $data['address_line_2'];
-                $hsSupplier->address_line_3 = $data['address_line_3'];
-                $hsSupplier->address_line_4 = $data['address_line_4'];
-                $hsSupplier->status = StatusType::ACTIVE;
 
                 $hsSupplier->save();
 
                 $hsSupplierLog = new HsSupplierLog();
                 $hsSupplierLog->splr_id = $hsSupplier->splr_id;
+                $hsSupplierLog->action = ActionType::STORE;
                 $hsSupplierLog->user_id = auth()->user()->user_id;
                 $hsSupplierLog->log_date_time = now();
                 $hsSupplierLog->save();
@@ -124,7 +125,7 @@ class HsSupplierController extends MasterController
                 DB::commit();
 
                 // db transaction success
-                $this->setFlashMessage('success', $hsUser->messages('success', 'create'));
+                $this->setFlashMessage('success', $hsSupplier->messages('success', 'create'));
                 return redirect($this->getRoute('create'));
             } catch (\Exception $e) {
                 DB::rollback();
@@ -141,28 +142,108 @@ class HsSupplierController extends MasterController
      * view supplier form
      */
     public function view($id) {
+        $supplierModel = new HsSupplier();
 
+        $supplierObj = $supplierModel::find($id);
+
+        $supplierActive = "active";
+
+        $title = $this->getTitle('view_supplier');
+
+        return view('supplier.view', compact('title', 'supplierObj', 'supplierActive'));
     }
 
     /**
      * show supplier edit form
      */
     public function edit($id) {
+        $supplierObj = HsSupplier::find($id);
 
+        $title = $this->getTitle('edit_supplier');
+
+        $supplierActive = "active";
+
+        return view('supplier.edit', compact('title', 'supplierObj', 'supplierActive'));
     }
 
     /**
      * update supplier
      */
     public function update(Request $request, $id) {
+        $data = Input::all();
 
+        $hsSupplier = HsSupplier::find($id);
+
+        $hsSupplier->name = $data['name'];
+        $hsSupplier->email = $data['email'];
+        $hsSupplier->telp_no = $data['telp_no'];
+        $hsSupplier->contact_name_1 = $data['contact_name_1'];
+        $hsSupplier->contact_person_1 = $data['contact_person_1'];
+        $hsSupplier->contact_name_2 = $data['contact_name_2'];
+        $hsSupplier->contact_person_2 = $data['contact_person_2'];
+        $hsSupplier->contact_name_3 = $data['contact_name_3'];
+        $hsSupplier->contact_person_3 = $data['contact_person_3'];
+        $hsSupplier->address_line_1 = $data['address_line_1'];
+        $hsSupplier->address_line_2 = $data['address_line_2'];
+        $hsSupplier->address_line_3 = $data['address_line_3'];
+        $hsSupplier->address_line_4 = $data['address_line_4'];
+        $hsSupplier->status = StatusType::ACTIVE;
+
+        if ($hsSupplier->validate($hsSupplier, $data, $hsSupplier->messages('validation'))) {
+            try {
+                DB::beginTransaction();
+
+                $hsSupplier->save();
+
+                $hsSupplierLog = new HsSupplierLog();
+                $hsSupplierLog->splr_id = $hsSupplier->splr_id;
+                $hsSupplierLog->action = ActionType::EDIT;
+                $hsSupplierLog->user_id = auth()->user()->user_id;
+                $hsSupplierLog->log_date_time = now();
+                $hsSupplierLog->save();
+
+                DB::commit();
+
+                // db transaction success
+                $this->setFlashMessage('success', $hsSupplier->messages('success', 'update'));
+                return redirect($this->getRoute('index'));
+            } catch (\Exception $e) {
+                DB::rollback();
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit'), $e);
+            }
+        } else {
+            // form validation error
+            $errors = $hsSupplier->errors();
+            return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('edit'), $errors);
+        }
     }
 
     /**
      * update supplier status to be inactive
      */
     public function delete($id) {
+        try {
+            DB::beginTransaction();
 
+            $hsSupplier = HsSupplier::find($id);
+            $hsSupplier->status = StatusType::INACTIVE;
+            $hsSupplier->save();
+
+            $hsSupplierLog = new HsSupplierLog();
+            $hsSupplierLog->splr_id = $hsSupplier->splr_id;
+            $hsSupplierLog->action = ActionType::TERMINATE;
+            $hsSupplierLog->user_id = auth()->user()->user_id;
+            $hsSupplierLog->log_date_time = now();
+            $hsSupplierLog->save();
+
+            DB::commit();
+            
+            $this->setFlashMessage('success', $hsSupplier->messages('success', 'delete'));
+            return redirect($this->getRoute('index'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('index'), $e);
+        }
     }
 
     /**
@@ -175,7 +256,7 @@ class HsSupplierController extends MasterController
             case 'create':
                 return route('manage.supplier.create');
             case 'view':
-                return route('manage.supplier.view');
+                return route('manage.supplier.view', $id);
             case 'edit':
                 return route('manage.supplier.edit', $id);
             case 'delete':

@@ -20,6 +20,7 @@ Route::get('/', function () {
 // Authentication Routing
 // disabled register route
 Auth::routes(['register' => false]);
+
 // prevent error while run logout url
 Route::get('/logout', function() {
     return back();
@@ -51,15 +52,15 @@ Route::prefix('/manage_supplier')->group(function() {
     Route::get('/list', 'HsSupplierController@displayData')->name('manage.supplier.list');
     Route::get('/create', 'HsSupplierController@create')->name('manage.supplier.create');
     Route::post('/create', 'HsSupplierController@store')->name('manage.supplier.store');
-    Route::get('/view/{id}', 'HsSupplierController@view')->name('manage.user.view');
-        Route::get('/edit/{id}', 'HsSupplierController@edit')->name('manage.user.edit');
-        Route::post('/update/{id}', 'HsSupplierController@update')->name('manage.user.update');
-        Route::post('/delete/{id}', 'HsSupplierController@delete')->name('manage.user.delete');
+    Route::get('/view/{id}', 'HsSupplierController@view')->name('manage.supplier.view');
+    Route::get('/edit/{id}', 'HsSupplierController@edit')->name('manage.supplier.edit');
+    Route::post('/update/{id}', 'HsSupplierController@update')->name('manage.supplier.update');
+    Route::post('/delete/{id}', 'HsSupplierController@delete')->name('manage.supplier.delete');
 });
 
 // manage item module
-Route::prefix('/manage_item')->group(function() {
-
+Route::prefix('/manage_item_detail')->group(function() {
+    Route::get('/', 'HsItemDetailController@index')->name('manage.item.detail');
 });
 
 

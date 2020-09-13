@@ -67,11 +67,19 @@
         Modul
     </div>
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item {{ isset($itemActive) ? $itemActive : ''}}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseItem" aria-expanded="true" aria-controls="collapseItem">
             <i class="fas fa-box"></i>
             <span>Item</span>
         </a>
+        
+        <div id="collapseItem" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ isset($itemDetailActive) ? $itemDetailActive : ''}}" href="{{ route('manage.item.detail') }}">Item</a>
+                <a class="collapse-item {{ isset($itemCategoryActive) ? $itemCategoryActive : ''}}" href="#">Kategori</a>
+                <a class="collapse-item {{ isset($itemUnitActive) ? $itemUnitActive : ''}}" href="#">Unit</a>
+            </div>
+        </div>
     </li>
 
     <li class="nav-item {{ isset($supplierActive) ? $supplierActive : '' }}">

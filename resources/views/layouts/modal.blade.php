@@ -48,7 +48,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" data-dismiss="modal">Tidak</button>
-                <a class="btn btn-success" href="{{ url()->previous() }}">Yakin</a>
+                <a id="previousUrlModal" class="btn btn-success" href="{{ url()->previous() }}">Yakin</a>
             </div>
         </div>
     </div>
@@ -71,3 +71,18 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        setPreviousUrl();
+    });
+
+    function setPreviousUrl() {
+        var previousModuleUrl = $('#previousUrlModule');
+        if (previousModuleUrl.length === 1) {
+            $('#previousUrlModal').attr('href', previousModuleUrl.attr('href'));
+        }
+    }
+</script>
+@endpush

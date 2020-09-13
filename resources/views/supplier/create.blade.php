@@ -7,7 +7,7 @@
                 <div class="card-header">
                     <span>{{ $title }}</span>
 
-                    <a href="{!! route('manage.supplier') !!}" class="btn btn-info btn-sm float-right"><i class="fa fa-arrow-left"></i> Kembali</a>
+                    <a id="previousUrlModule" href="{!! route('manage.supplier') !!}" class="btn btn-info btn-sm float-right"><i class="fa fa-arrow-left"></i> Kembali</a>
                 </div>
 
                 <div class="card-body">

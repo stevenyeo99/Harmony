@@ -24,6 +24,8 @@ class CreateHsItemDetailsTable extends Migration
             $table->decimal('quantity', 21, 2);
             $table->foreign('splr_id')->references('splr_id')->on('hs_supplier');
             $table->foreign('itcg_id')->references('itcg_id')->on('hs_item_category');
+            $table->string('status', 10);
+            $table->foreign('ituo_id')->references('ituo_id')->on('hs_item_uom');
             $table->timestamps();
         });
     }

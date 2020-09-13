@@ -39,7 +39,7 @@
                                         </td>
 
                                         <td class="bg-primary text-white">
-                                            {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '2')) }}
+                                            {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '3')) }}
                                         </td>
 
                                         <td class="bg-primary text-white"></td>
@@ -94,7 +94,7 @@
             });
 
             // by default search active first when first enter
-            dtTable.column(2).search("ACTIVE").draw();
+            dtTable.column(3).search("ACTIVE").draw();
         }
     </script>
 @endpush

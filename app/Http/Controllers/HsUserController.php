@@ -95,7 +95,6 @@ class HsUserController extends MasterController {
      */
     public function displayData(Request $request) {
         $rsUser = auth()->user()
-            ->latest()
             ->where('is_admin', '!=', UserType::IsAdmin)
             ->select(['user_id', 'user_name', 'email', 'status']);
     
