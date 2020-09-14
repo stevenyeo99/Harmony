@@ -58,9 +58,21 @@ Route::prefix('/manage_supplier')->group(function() {
     Route::post('/delete/{id}', 'HsSupplierController@delete')->name('manage.supplier.delete');
 });
 
-// manage item module
+// manage item detail module
 Route::prefix('/manage_item_detail')->group(function() {
     Route::get('/', 'HsItemDetailController@index')->name('manage.item.detail');
+});
+
+// manage item category module
+Route::prefix('/manage_item_category')->group(function() {
+
+});
+
+// manage item unit module
+Route::prefix('/manage_item_unit')->group(function() {
+    Route::get('/', 'HsItemUnitController@index')->name('manage.item.unit');
+    
+    Route::get('/create', 'HsItemUnitController@create')->name('manage.item.unit.create');
 });
 
 

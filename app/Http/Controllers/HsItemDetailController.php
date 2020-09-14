@@ -26,6 +26,6 @@ class HsItemDetailController extends MasterController {
 
         $ddlStatus = StatusType::getStrings();
 
-        return view('item.index', compact('title', 'itemActive', 'itemDetailActive', 'ddlStatus'));
+        return view('item.detail.index', compact('title', 'itemActive', 'itemDetailActive', 'ddlStatus'));
     }
 }

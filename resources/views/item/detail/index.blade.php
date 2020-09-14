@@ -7,9 +7,9 @@
             <div class="card-header">
                 <span>{{ $title }}</span>
                     
-                    <a href="#" class="btn btn-success float-right">
-                        <i class="fa fa-plus"></i> Item
-                    </a>
+                <a href="#" class="btn btn-success float-right">
+                    <i class="fa fa-plus"></i> Tambah
+                </a>
             </div>
 
             <div class="card-body">

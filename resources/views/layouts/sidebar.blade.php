@@ -77,7 +77,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ isset($itemDetailActive) ? $itemDetailActive : ''}}" href="{{ route('manage.item.detail') }}">Item</a>
                 <a class="collapse-item {{ isset($itemCategoryActive) ? $itemCategoryActive : ''}}" href="#">Kategori</a>
-                <a class="collapse-item {{ isset($itemUnitActive) ? $itemUnitActive : ''}}" href="#">Unit</a>
+                <a class="collapse-item {{ isset($itemUnitActive) ? $itemUnitActive : ''}}" href="{{ route('manage.item.unit') }}">Unit</a>
             </div>
         </div>
     </li>

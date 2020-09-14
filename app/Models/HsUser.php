@@ -36,6 +36,8 @@ class HsUser extends Authenticatable
         'updated_at',
     ];
 
+    public $timestamps = false;
+
     protected $table = 'hs_user';
 
     protected $primaryKey = "user_id";
