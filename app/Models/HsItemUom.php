@@ -35,7 +35,6 @@ class HsItemUom extends BaseModel
                     'name.unique' => 'Nama yang sama telah digunakan.',
                     'description.required' => 'Deskripsi tidak boleh kosong.',
                     'description.max' => 'Deskripsi maksimal 200 huruf atau angka.',
-                    'status.required' => 'Status tidak boleh kosong.',
                 ];
             case 'success':
                 switch ($keyTwo) {
@@ -60,13 +59,11 @@ class HsItemUom extends BaseModel
             return [
                 'name' => 'required|max:20|unique:hs_item_uom,name,'.$hsItemUom->ituo_id.',ituo_id',
                 'description' => 'required|max:200',
-                'status' => 'required'
             ];
         } else {
             return [
                 'name' => 'required|max:20|unique:hs_item_uom',
                 'description' => 'required|max:200',
-                'status' => 'required'
             ];
         }
     }

@@ -37,7 +37,6 @@ class HsItemCategory extends BaseModel
                     'name.max' => 'Nama maksimal 50 huruf atau angka.',
                     'description.required' => 'Deskripsi tidak boleh kosong.',
                     'description.max' => 'Deskripsi maksimal 200 huruf atau angka.',
-                    'status.required' => 'Status tidak boleh kosong.',
                 ];
             case 'success':
                 switch ($keyTwo) {
@@ -60,17 +59,15 @@ class HsItemCategory extends BaseModel
     public function rules(HsItemCategory $hsItemCategory) {
         if (isset($hsItemCategory->itcg_id)) {
             return [
-                'code' => 'required|max:20|unique:hs_item_category,code,'.$hsItemCategory->ituo_id.',itcg_id',
+                'code' => 'required|max:10|unique:hs_item_category,code,'.$hsItemCategory->itcg_id.',itcg_id',
                 'name' => 'required|max:50',
-                'description' => 'required|max:200',
-                'status' => 'required'
+                'description' => 'required|max:100',
             ];
         } else {
             return [
                 'code' => 'required|max:10|unique:hs_item_category',
                 'name' => 'required|max:50',
-                'description' => 'required|max:200',
-                'status' => 'required'
+                'description' => 'required|max:100',
             ];
         }
     }

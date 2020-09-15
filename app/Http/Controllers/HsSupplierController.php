@@ -40,7 +40,9 @@ class HsSupplierController extends MasterController
             ->addColumn('action', function($supplier) {
                 $btn = "<a href='" . $this->getRoute('view', $supplier->splr_id) . "' class='btn btn-info btn-sm'>Lihat</a>";
                 $btn .= " <a href='" . $this->getRoute('edit', $supplier->splr_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
-                $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $supplier->splr_id) . "\");'>Hapus</button>";
+                if ($supplier->status == StatusType::ACTIVE) {
+                    $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $supplier->splr_id) . "\");'>Hapus</button>";
+                }
                 
                 return $btn;
             })
@@ -209,12 +211,12 @@ class HsSupplierController extends MasterController
                 return redirect($this->getRoute('index'));
             } catch (\Exception $e) {
                 DB::rollback();
-                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit'), $e);
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit', $hsSupplier->splr_id), $e);
             }
         } else {
             // form validation error
             $errors = $hsSupplier->errors();
-            return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('edit'), $errors);
+            return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('edit', $hsSupplier->splr_id), $errors);
         }
     }
 
