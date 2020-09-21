@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\StatusType;
 
 class HsItemUom extends BaseModel
 {
@@ -13,6 +14,15 @@ class HsItemUom extends BaseModel
     protected $fillable = [
         'name', 'description', 'status'
     ];
+
+    public function getItemUom() {
+        $listOfItemUom = [];
+        $rsItemUom = $this::where('status', StatusType::ACTIVE)->get();
+        foreach($rsItemUom as $itemUom) {
+            $listOfItemUom[$itemUom->ituo_id] = $itemUom->name;
+        }
+        return $listOfItemUom;
+    }
 
     public function hsItemUomLog() {
         return $this->hasMany('App\Models\HsItemUomLog');

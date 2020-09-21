@@ -27,6 +27,8 @@ class CreateHsItemDetailsTable extends Migration
             $table->string('status', 10);
             $table->foreign('ituo_id')->references('ituo_id')->on('hs_item_uom');
             $table->timestamps();
+            $table->decimal('net_pct', 38, 2);
+            $table->decimal('net_price', 38, 2);
         });
     }
 

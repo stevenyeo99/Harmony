@@ -7,15 +7,93 @@
             <div class="card-header">
                 <span>{{ $title }}</span>
                     
-                <a href="#" class="btn btn-success float-right">
+                <a href="{!! route('manage.item.detail.create') !!}" class="btn btn-success float-right">
                     <i class="fa fa-plus"></i> Tambah
                 </a>
             </div>
 
             <div class="card-body">
+                <div class="container-fluid">
+                    <div class="table-responsive">
+                        <table class="table table-bordered hover compact dtTable" id="dtManageItemDetail">
+                            <thead>
+                                <tr role="row">
+                                    <th class="text-center bg-primary text-white">Kode</th>
+                                    <th class="text-center bg-primary text-white">Name</th>
+                                    <th class="text-center bg-primary text-white">Kategori</th>
+                                    <th class="text-center bg-primary text-white">Status</th>
+                                    <th class="text-center bg-primary text-white">Aksi</th>
+                                </tr>
 
+                                <tr role="row" class="filter">
+                                    <td class="bg-primary text-white">
+                                        {{ Form::text('code', null, array('class' => 'w-100 form-control text-filter', 'data-column' => '0')) }}
+                                    </td>
+
+                                    <td class="bg-primary text-white">
+                                        {{ Form::text('name', null, array('class' => 'w-100 form-control text-filter', 'data-column' => '1')) }}
+                                    </td>
+
+                                    <td class="bg-primary text-white">
+                                        {{ Form::select('itcg_id', $listOfItemCategory, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '2')) }}
+                                    </td>
+
+                                    <td class="bg-primary text-white">
+                                        {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '3')) }}
+                                    </td>
+
+                                    <td class="bg-primary text-white"></td> 
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            initializeManageItemDetailDatatable();
+        });
+
+        function initializeManageItemDetailDatatable() {
+            let dtTable = $('#dtManageItemDetail').DataTable({
+                processing: true,
+                serverSide: true,
+                orderCellsTop: true,
+                ajax: '{!! route('manage.item.detail.list') !!}',
+                columns: [
+                    { data: 'code', name: 'code' },
+                    { data: 'name', name: 'name' },
+                    { data: 'itcg_id', name: 'itcg_id' },
+                    { data: 'status', name: 'status' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, width: '20%' },
+                ],
+                responsive: true,
+                language: {
+                    'url': '/assets/json/datatable-id-lang.json'
+                }
+            });
+
+            $('input.text-filter').on('keyup', function() {
+                var i = $(this).attr('data-column');
+                var v = $(this).val();
+                dtTable.column(i).search(v).draw();
+            });
+
+            $('select.select-filter').on('change', function() {
+                var i = $(this).attr('data-column');
+                var v = $(this).val();
+                dtTable.column(i).search(v).draw();
+            });
+
+            // by default search active first when first enter
+            dtTable.column(3).search("ACTIVE").draw();
+            dtTable.column(2).search("ACTIVE").draw();
+        }
+    </script>
+@endpush

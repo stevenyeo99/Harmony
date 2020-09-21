@@ -2,3 +2,7 @@
 .noOutlineX:focus {
     outline: none;
 }
+
+.amountPercentInput {
+    text-align: right;
+}

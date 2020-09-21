@@ -42,11 +42,11 @@ class HsItemCategoryController extends MasterController {
                 
                 return $btn;
             })
-            ->editColumn('status', function($itemUnit) {
-                $label = "<span class='badge badge-success'>" . $itemUnit->status . "</span>";
+            ->editColumn('status', function($itemCategory) {
+                $label = "<span class='badge badge-success'>" . $itemCategory->status . "</span>";
 
-                if ($itemUnit->status == 'INACTIVE') {
-                    $label = "<span class='badge badge-danger'>" . $itemUnit->status . "</span>";
+                if ($itemCategory->status == 'INACTIVE') {
+                    $label = "<span class='badge badge-danger'>" . $itemCategory->status . "</span>";
                 }
 
                 return $label;

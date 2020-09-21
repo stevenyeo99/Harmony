@@ -61,6 +61,9 @@ Route::prefix('/manage_supplier')->group(function() {
 // manage item detail module
 Route::prefix('/manage_item_detail')->group(function() {
     Route::get('/', 'HsItemDetailController@index')->name('manage.item.detail');
+    Route::get('/list', 'HsItemDetailController@displayData')->name('manage.item.detail.list');
+    Route::get('/create', 'HsItemDetailController@create')->name('manage.item.detail.create');
+    Route::post('/create', 'HsItemDetailController@store')->name('manage.item.detail.store');
 });
 
 // manage item category module

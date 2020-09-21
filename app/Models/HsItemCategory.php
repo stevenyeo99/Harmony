@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\StatusType;
 
 class HsItemCategory extends BaseModel
 {
@@ -13,6 +14,15 @@ class HsItemCategory extends BaseModel
     protected $fillable = [
         'code', 'name', 'description', 'status'
     ];
+
+    public function getItemCategory() {
+        $listOfItemCategory = [];
+        $rsItemCategory = $this::where('status', StatusType::ACTIVE)->get();
+        foreach($rsItemCategory as $itemCategory) {
+            $listOfItemCategory[$itemCategory->itcg_id] = $itemCategory->name;
+        }
+        return $listOfItemCategory;
+    }
 
     public function hsItemCategoryLog() {
         return $this->hasMany('App\Models\HsItemCategoryLog');

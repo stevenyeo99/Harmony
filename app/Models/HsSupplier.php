@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\StatusType;
 
 class HsSupplier extends BaseModel
 {
@@ -15,6 +16,15 @@ class HsSupplier extends BaseModel
         'telp_no', 'contact_person_1', 'contact_person_2', 'contact_person_3', 'status',
         'contact_name_1', 'contact_name_2', 'contact_name_3'
     ];
+
+    public function getSupplier() {
+        $listOfSupplier = [];
+        $rsSupplier = $this::where('status', StatusType::ACTIVE)->get();
+        foreach($rsSupplier as $supplier) {
+            $listOfSupplier[$supplier->splr_id] = $supplier->name;
+        }
+        return $listOfSupplier;
+    }
 
     /**
      * supplier 1-n supplier log
