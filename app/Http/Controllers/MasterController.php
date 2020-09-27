@@ -14,7 +14,7 @@ class MasterController extends Controller {
     /**
      * get each module title
      */
-    public function getTitle(String $key) {
+    public function getTitle(String $key, String $key2 = null) {
         switch ($key) {
             case 'home':
                 $title = "Beranda";
@@ -58,6 +58,9 @@ class MasterController extends Controller {
             case 'manage_item_uom':
                 $title = "Manajemen Jenis Unit";
                 break;
+            case 'manage_item_stock':
+                $title = "Detail Transaksi Stock Item " . $key2;
+                break;
             case 'create_item_detail':
                 $title = "Buat Item";
                 break;
@@ -84,6 +87,9 @@ class MasterController extends Controller {
                 break;
             case 'edit_item_uom':
                 $title = "Edit Jenis Unit";
+                break;
+            case 'edit_item_stock':
+                $title = "Atur Kuantiti Stock Item " . $key2;
                 break;
             default:
                 return '';

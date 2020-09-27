@@ -169,7 +169,7 @@ class HsItemCategoryController extends MasterController {
                 $this->setFlashMessage('success', $hsItemCategory->messages('success', 'update'));
                 return redirect($this->getRoute('index'));
             } catch (\Exception $e) {
-                 DB::rollback();
+                DB::rollback();
                 return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit', $hsItemCategory->itcg_id), $e);
             }
         } else {

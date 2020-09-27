@@ -19,10 +19,12 @@ class CreateHsItemStockLogsTable extends Migration
             $table->decimal('original_quantity', 21, 2);
             $table->decimal('add_quantity', 21, 2);
             $table->decimal('min_quantity', 21, 2);
-            $table->integer('prdt_id')->unsigned();
-            $table->integer('ivdt_id')->unsigned();
+            $table->integer('prdt_id')->unsigned()->nullable();
+            $table->integer('ivdt_id')->unsigned()->nullable();
             $table->string('change_type', 20);
             $table->datetime('change_time');
+            $table->decimal('new_quantity', 21, 2);
+            $table->text('description');
             $table->integer('user_id')->unsigned();
             $table->foreign('itdt_id')->references('itdt_id')->on('hs_item_detail');
             $table->foreign('prdt_id')->references('prdt_id')->on('hs_purchase_detail');

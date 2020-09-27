@@ -46,7 +46,7 @@ class HsItemCategory extends BaseModel
                     'name.required' => 'Nama tidak boleh kosong.',
                     'name.max' => 'Nama maksimal 50 huruf atau angka.',
                     'description.required' => 'Deskripsi tidak boleh kosong.',
-                    'description.max' => 'Deskripsi maksimal 200 huruf atau angka.',
+                    'description.max' => 'Deskripsi maksimal 100 huruf atau angka.',
                 ];
             case 'success':
                 switch ($keyTwo) {

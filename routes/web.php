@@ -64,6 +64,14 @@ Route::prefix('/manage_item_detail')->group(function() {
     Route::get('/list', 'HsItemDetailController@displayData')->name('manage.item.detail.list');
     Route::get('/create', 'HsItemDetailController@create')->name('manage.item.detail.create');
     Route::post('/create', 'HsItemDetailController@store')->name('manage.item.detail.store');
+    Route::get('/view/{id}', 'HsItemDetailController@view')->name('manage.item.detail.view');
+    Route::get('/edit/{id}', 'HsItemDetailController@edit')->name('manage.item.detail.edit');
+    Route::post('/update/{id}', 'HsItemDetailController@update')->name('manage.item.detail.update');
+    Route::post('/delete/{id}', 'HsItemDetailController@delete')->name('manage.item.detail.delete');
+    Route::get('/stock/{id}', 'HsItemDetailController@viewStock')->name('manage.item.detail.viewStock');
+    Route::get('/listStock/{id}', 'HsItemDetailController@listStock')->name('manage.item.detail.listStock');
+    Route::get('/editStock/{id}', 'HsItemDetailController@editStock')->name('manage.item.detail.editStock');
+    Route::post('/updateStock/{id}', 'HsItemDetailController@updateStock')->name('manage.item.detail.updateStock');
 });
 
 // manage item category module
@@ -89,7 +97,6 @@ Route::prefix('/manage_item_unit')->group(function() {
     Route::post('/update/{id}', 'HsItemUnitController@update')->name('manage.item.unit.update');
     Route::post('/delete/{id}', 'HsItemUnitController@delete')->name('manage.item.unit.delete');
 });
-
 
 // manage purchase module
 Route::prefix('/manage_purchase')->group(function() {

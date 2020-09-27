@@ -19,7 +19,7 @@
                             <thead>
                                 <tr role="row">
                                     <th class="text-center bg-primary text-white">Kode</th>
-                                    <th class="text-center bg-primary text-white">Name</th>
+                                    <th class="text-center bg-primary text-white">Nama</th>
                                     <th class="text-center bg-primary text-white">Kategori</th>
                                     <th class="text-center bg-primary text-white">Status</th>
                                     <th class="text-center bg-primary text-white">Aksi</th>
@@ -67,10 +67,10 @@
                 orderCellsTop: true,
                 ajax: '{!! route('manage.item.detail.list') !!}',
                 columns: [
-                    { data: 'code', name: 'code' },
-                    { data: 'name', name: 'name' },
-                    { data: 'itcg_id', name: 'itcg_id' },
-                    { data: 'status', name: 'status' },
+                    { data: 'code', name: 'code', width: '10%' },
+                    { data: 'name', name: 'name', width: '20%' },
+                    { data: 'itcg_id', name: 'itcg_id', width: '15%' },
+                    { data: 'status', name: 'status', width: '17%' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, width: '20%' },
                 ],
                 responsive: true,

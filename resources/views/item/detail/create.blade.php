@@ -11,6 +11,8 @@
                 </div>
 
                 <div class="card-body">
+                    {!! Form::open(array('url' => route('manage.item.detail.store'), 'method' => 'POST', 'id' => 'frm')) !!}
+                    @csrf
                     <div class="form-group form-inline">
                         {{ Form::label('name', 'Nama<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
                         
@@ -49,7 +51,7 @@
                         {{ Form::label('ituo_id', 'Jenis<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::select('ituo_id', $listOfItemUom, old('itcg_id'), array('class' => 'form-control w-100', 'maxlength' => '20')) }}
+                            {{ Form::select('ituo_id', $listOfItemUom, old('ituo_id'), array('class' => 'form-control w-100', 'maxlength' => '20')) }}
                         </div>
                     </div>
 
@@ -57,13 +59,13 @@
                         {{ Form::label('quantity', 'Kuantiti<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
                         
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('quantity', old('quantity'), array('class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21')) }}
+                            {{ Form::text('quantity', old('quantity') ?  old('quantity') : '1.00', array('id' => 'quantity', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21')) }}
                         </div>
 
                         {{ Form::label('price', 'Harga Beli<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('price', old('price'), array('class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38')) }}
+                            {{ Form::text('price', old('price') ?  old('price') : '0.00', array('id' => 'price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38')) }}
                         </div>
                     </div>
 
@@ -71,13 +73,13 @@
                         {{ Form::label('net_pct', 'Untung%<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
                         
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('net_pct', old('net_pct') ?  old('net_pct') : '0.00', array('class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21')) }}
+                            {{ Form::text('net_pct', old('net_pct') ?  old('net_pct') : '0.00', array('id' => 'net_pct', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21')) }}
                         </div>
 
                         {{ Form::label('net_price', 'Harga Jual<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('net_price', old('net_price'), array('class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))', 'placeholder' => '0.00')) }}
+                            {{ Form::text('net_price', old('net_price'), array('id' => 'net_price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))', 'placeholder' => '0.00', 'readonly' => true)) }}
                         </div>
                     </div>
 
@@ -95,11 +97,49 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
+            triggerChangeEvent();
+        });
 
-    });
+        function triggerChangeEvent() {
+            $('#quantity').change(function() {
+                calculateSellingPrice();
+            });
 
-    
-</script>
+            $('#price').change(function() {
+                calculateSellingPrice();
+            });
+
+            $('#net_pct').change(function() {
+                calculateSellingPrice();
+            });
+        }
+
+        function calculateSellingPrice() {
+            var quantity = $('#quantity').val();
+            var price = $('#price').val();
+            var net_pct = $('#net_pct').val();
+            var net_price = $('#net_price');
+
+            if (quantity === '') {
+                quantity = '0.00';
+            }
+            quantity = parseFloat(removeNumberFormat(quantity));
+            
+            if (price === '') {
+                price = '0.00';
+            }
+            price = parseFloat(removeNumberFormat(price));
+
+            if (net_pct === '') {
+                net_pct = '0.00';
+            }
+            net_pct = parseFloat(removeNumberFormat(net_pct));
+
+            var total_price =  price;
+            var total_net_price = total_price + ((net_pct / 100) * total_price);
+            net_price.val(getPriceFormattedNumber(total_net_price, 2));
+        }
+    </script>
 @endpush
