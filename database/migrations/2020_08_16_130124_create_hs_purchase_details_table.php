@@ -18,6 +18,7 @@ class CreateHsPurchaseDetailsTable extends Migration
             $table->integer('prch_id')->unsigned();
             $table->integer('itdt_id')->unsigned();
             $table->decimal('quantity', 21, 2);
+            $table->decimal('price', 38, 2);
             $table->decimal('sub_total', 38, 2);
             $table->foreign('prch_id')->references('prch_id')->on('hs_purchase');
             $table->foreign('itdt_id')->references('itdt_id')->on('hs_item_detail');

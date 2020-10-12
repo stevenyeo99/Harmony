@@ -12,7 +12,7 @@ class HsItemStockLog extends BaseModel
 
     protected $fillable = [
         'itdt_id', 'original_quantity', 'add_quantity', 'min_quantity', 'prdt_id',
-        'ivdt_id', 'change_type', 'change_time', 'user_id', 'new_quantity'
+        'ivdt_id', 'change_type', 'change_time', 'user_id', 'new_quantity', 'description'
     ];
 
     /**
@@ -23,6 +23,29 @@ class HsItemStockLog extends BaseModel
     }
 
     public function errors() {
-        return $this->errors();
+        return $this->errors;
+    }
+
+    public function messages(string $key) {
+        switch ($key) {
+            case 'validation':
+                return [
+                    'new_quantity.required' => 'Kuantiti baru tidak boleh kosong.',
+                    'new_quantity.regex' => 'Kuantiti harus berupa format decimal.',
+                    'description.required' => 'Deskripsi tidak boleh kosong.',
+                    'description.max' => 'Deskripsi maksimal 100 huruf atau angka.',
+                ];
+            case 'success':
+                return 'Telan mengatur kuantiti item dengan sukses!';
+            default: 
+                break;
+        }
+    }
+
+    public function rules(HsItemStockLog $hsItemStockLog) {
+        return [
+            'new_quantity' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'description' => 'required|max:100',
+        ];
     }
 }

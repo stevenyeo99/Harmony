@@ -65,7 +65,7 @@
                         {{ Form::label('price', 'Harga Beli<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('price', old('price') ?  old('price') : $itemDetailObj->price, array('id' => 'price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38')) }}
+                            {{ Form::text('price', old('price') ?  old('price') : $itemDetailObj->price, array('id' => 'price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
                         </div>
                     </div>
 
@@ -73,7 +73,7 @@
                         {{ Form::label('net_pct', 'Untung%<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
                         
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('net_pct', old('net_pct') ?  old('net_pct') : $itemDetailObj->net_pct, array('id' => 'net_pct', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21')) }}
+                            {{ Form::text('net_pct', old('net_pct') ?  old('net_pct') : $itemDetailObj->net_pct, array('id' => 'net_pct', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21', 'onkeypress' => 'return isNumberPercentage(event, $(this))')) }}
                         </div>
 
                         {{ Form::label('net_price', 'Harga Jual<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}

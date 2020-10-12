@@ -54,7 +54,7 @@ class HsItemDetailController extends MasterController {
                 $btn .= " <a href='" . $this->getRoute('edit', $itemDetail->itdt_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
                 if ($itemDetail->status == StatusType::ACTIVE) {
                     $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $itemDetail->itdt_id) . "\");'>Hapus</button>";
-                    $btn .= " <a href='" . $this->getRoute('stock', $itemDetail->itdt_id) . "' class='btn btn-success btn-sm'>Stock</a>";
+                    $btn .= " <a href='" . $this->getRoute('stock', $itemDetail->itdt_id) . "' class='btn btn-secondary btn-sm'>Stock</a>";
                 }
                 
                 return $btn;
@@ -335,7 +335,7 @@ class HsItemDetailController extends MasterController {
             ->join('hs_user as user', 'user.user_id', '=', 'stock.user_id')
             ->orderBy('stock.change_time', 'desc')
             ->selectRaw('stock.original_quantity, stock.add_quantity, stock.min_quantity, stock.new_quantity, stock.change_type, 
-                user.user_name, stock.change_time');
+                stock.description, user.user_name, stock.change_time');
 
         return DataTables::of($rsItemStock)
             ->addColumn('before', function($itemStock) {
@@ -346,7 +346,7 @@ class HsItemDetailController extends MasterController {
                 if ($itemStock->add_quantity != '0.00') {
                     $spanQty = '<span class="text text-success">+'.$itemStock->add_quantity.'</span>';
                 } else if ($itemStock->min_quantity != '0.00') {
-                    $spanQty = '<span class="text text-danger">+'.$itemStock->min_quantity.'</span>';
+                    $spanQty = '<span class="text text-danger">-'.$itemStock->min_quantity.'</span>';
                 } 
                 return $spanQty;
             })
@@ -362,6 +362,14 @@ class HsItemDetailController extends MasterController {
             ->addColumn('log', function($itemStock) {
                 return $itemStock->change_time;
             })
+            ->filterColumn('editBy', function($query, $keyword) {
+                $query->where('user.user_name', 'like', '%'.$keyword.'%');
+            })
+            ->filterColumn('log', function($query, $keyword) {
+                if ($keyword) {
+                    $query->whereDate('change_time', '=', $keyword);
+                }
+            })
             ->rawColumns(['before', 'transaction', 'after', 'type', 'editBy', 'log'])
             ->make(true);
     } 
@@ -371,13 +379,74 @@ class HsItemDetailController extends MasterController {
      */
     public function editStock($id) {
 
+        $hsItemDetail = HsItemDetail::find($id);
+        $itemStockName = '(' . $hsItemDetail->name . ' - [' . $hsItemDetail->code . '])';
+        $title = $this->getTitle('edit_item_stock', $itemStockName);
+        $itemActive = "active";
+        $oriQuantity = $hsItemDetail->quantity;
+
+        $itemDetailActive = "active";
+        $itemId = $id;
+        return view('item.stock.edit', compact('title', 'itemActive', 'itemDetailActive', 'itemId', 'oriQuantity'));
     }
 
     /**
      * update stock transaction by user manual
      */
     public function updateStock(Request $request, $id) {
+        $data = Input::all();
+        $data['original_quantity'] = str_replace(',', '', $data['original_quantity']);
+        $data['new_quantity'] = str_replace(',', '', $data['new_quantity']);
 
+        $hsItemStockLog = new HsItemStockLog();
+
+        if ($hsItemStockLog->validate($hsItemStockLog, $data, $hsItemStockLog->messages('validation'))) {
+            $originalQuantity = floatval($data['original_quantity']);
+            $newQuantity = floatval($data['new_quantity']);
+
+            // do return error message if no difference between original quantity and new quantity
+            if ($newQuantity > $originalQuantity) {
+                $hsItemStockLog->add_quantity = $newQuantity - $originalQuantity;
+                $hsItemStockLog->min_quantity = '0.00';
+            } else if ($newQuantity < $originalQuantity) {
+                $hsItemStockLog->min_quantity = $originalQuantity - $newQuantity;
+                $hsItemStockLog->add_quantity = '0.00';
+            } else {
+                $errors = 'Kuantiti tidak bisa diubah dikarenakan masi sama!';
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('editStock', $id), $errors);
+            }
+
+            try {
+                DB::beginTransaction();
+
+                // HS_ITEM_STOCK_LOG
+                $hsItemStockLog->itdt_id = $id;
+                $hsItemStockLog->original_quantity = $originalQuantity;
+                $hsItemStockLog->change_type = ChangeType::EDITITEM;
+                $hsItemStockLog->change_time = now();
+                $hsItemStockLog->user_id = Auth()->user()->user_id;
+                $hsItemStockLog->new_quantity = $newQuantity;
+                $hsItemStockLog->description = $data['description'];
+                $hsItemStockLog->save();
+
+                // HS_ITEM_DETAIL
+                $hsItemDetail = HsItemDetail::find($id);
+                $hsItemDetail->quantity = $hsItemStockLog->new_quantity;
+                $hsItemDetail->updated_at = now();
+                $hsItemDetail->save();
+
+                DB::commit();
+
+                $this->setFlashMessage('success', $hsItemStockLog->messages('success'));
+                return redirect($this->getRoute('stock', $id));
+            } catch (\Exception $e) {
+                DB::rollback();
+                return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('editStock', $id), $e);
+            }
+        } else {
+            $errors = $hsItemStockLog->errors();
+            return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('editStock', $id), $errors);
+        }       
     }
 
     public function getRoute($key, $id = null) {

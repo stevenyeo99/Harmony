@@ -7,9 +7,7 @@
             <div class="card-header">
                 <span>{{ $title }}</span>
 
-                <a href="{!! route('manage.item.detail.editStock', $itemId) !!}" class="btn btn-success float-right">
-                    <i class="fa fa-plus"></i> Tambah
-                </a>
+                <a id="previousUrlModule" href="{!! route('manage.item.detail') !!}" class="btn-info btn-sm btn float-right"><i class="fa fa-arrow-left"></i> Kembali</a>
             </div>
 
             <div class="card-body">
@@ -17,11 +15,19 @@
                     <div class="table-responsive">
                         <table class="table table-bordered hover compact dtTable" id="dtManageItemStock">
                             <thead>
+                                <tr>
+                                    <th class="text-center bg-primary text-white" colspan="6">
+                                        <a href="{!! route('manage.item.detail.editStock', $itemId) !!}" class="btn btn-success float-right">
+                                            <i class="fa fa-cog"></i> Atur
+                                        </a>
+                                    </th>
+                                </tr>
+
                                 <tr role="row">
                                     <th class="text-center bg-primary text-white">Sebelum</th>
                                     <th class="text-center bg-primary text-white">+/-</th>
                                     <th class="text-center bg-primary text-white">Sesudah</th>
-                                    <th class="text-center bg-primary text-white">Tipe</th>
+                                    <th class="text-center bg-primary text-white">Alasan</th>
                                     <th class="text-center bg-primary text-white">Diubah</th>
                                     <th class="text-center bg-primary text-white">Log</th>
                                 </tr>
@@ -31,13 +37,13 @@
                                     <td class="bg-primary text-white"></td>
                                     <td class="bg-primary text-white"></td>
                                     <td class="bg-primary text-white">
-
+                                        {{ Form::text('description', null, array('class' => 'w-100 form-control text-filter', 'data-column' => '3')) }}
                                     </td>
                                     <td class="bg-primary text-white">
                                         {{ Form::text('user_name', null, array('class' => 'w-100 form-control text-filter', 'data-column' => '4')) }}
                                     </td>
                                     <td class="bg-primary text-white">
-                                        {{ Form::text('log', null, array('id' => 'log', 'class' => 'w-100 form-control text-filter', 'data-column' => '4', 'readonly' => 'true', 'style' => 'text-align: center;')) }}
+                                        {{ Form::text('log', null, array('id' => 'log', 'class' => 'w-100 form-control text-filter', 'data-column' => '5', 'readonly' => 'true', 'style' => 'text-align: center;')) }}
                                     </td>
                                 </tr>
                             </thead>
@@ -62,9 +68,6 @@
         function initializeDatePicker() {
             $('#log').datepicker({
                 dateFormat: 'yy-mm-dd',
-                // onSelect: function(dateText, inst) {
-                //     alert(dateText);
-                // }
             });
         }
 
@@ -78,7 +81,7 @@
                     { data: 'before', name: 'before' },
                     { data: 'transaction', name: 'transaction' },
                     { data: 'after', name: 'after' },
-                    { data: 'type', name: 'type' },
+                    { data: 'description', name: 'description' },
                     { data: 'editBy', name: 'editBy' },
                     { data: 'log', name: 'log' },
                 ],
@@ -104,6 +107,16 @@
                 language: {
                     'url': '/assets/json/datatable-id-lang.json'
                 }
+            });
+
+            $('input.text-filter').on('keyup change', function(e) {
+                var i = $(this).attr('data-column');
+                var v = $(this).val();
+                if (e.keyCode == 27) {
+                    $(this).val('');
+                    v = '';
+                }
+                dtTable.column(i).search(v).draw();
             });
         }
     </script>
