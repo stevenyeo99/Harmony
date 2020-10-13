@@ -85,13 +85,13 @@ class HsItemDetailController extends MasterController {
      * generate item code
      */
     public function generateItemCode() {
-        $rsItemCategory = HsItemDetail::orderBy('code', 'desc')->first();
-        if (isset($rsItemCategory)) {
-            $itemCategoryCode = "IT" . str_pad(intval(substr($rsItemCategory->code, 2)) + 1, 8, "0", STR_PAD_LEFT);
+        $rsItemDetail = HsItemDetail::orderBy('code', 'desc')->first();
+        if (isset($rsItemDetail)) {
+            $rsItemDetail = "IT" . str_pad(intval(substr($rsItemDetail->code, 2)) + 1, 8, "0", STR_PAD_LEFT);
         }  else {
-            $itemCategoryCode = "IT00000001";
+            $rsItemDetail = "IT00000001";
         }
-        return $itemCategoryCode;
+        return $rsItemDetail;
     }
 
     /**

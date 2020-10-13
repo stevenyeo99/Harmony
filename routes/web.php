@@ -100,7 +100,10 @@ Route::prefix('/manage_item_unit')->group(function() {
 
 // manage purchase module
 Route::prefix('/manage_purchase')->group(function() {
-
+    Route::get('/', 'HsPurchaseController@index')->name('manage.purchase');
+    Route::get('/list', 'HsPurchaseController@displayData')->name('manage.purchase.list');
+    Route::get('/create', 'HsPurchaseController@create')->name('manage.purchase.create');
+    Route::post('/create', 'HsPurchaseController@store')->name('manage.purchase.store');
 });
 
 // manage invoice module
