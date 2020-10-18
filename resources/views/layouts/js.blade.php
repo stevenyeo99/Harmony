@@ -11,4 +11,9 @@
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+<!-- chosen dropdown -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+
+{!! Html::script('js/purchase.js') !!}
+
 @stack('scripts')

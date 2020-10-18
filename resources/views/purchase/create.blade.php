@@ -33,16 +33,16 @@
                                     <thead>
                                         <tr role="row">
                                             <th class="text-center bg-primary text-white" colspan="6">
-                                                <img src="{{ url('/img/add.png') }}" alt="add" style="width: 2rem; height: 2rem; cursor: pointer;">
+                                                <img src="{{ url('/img/add.png') }}" id="addItem" alt="add" style="width: 2rem; height: 2rem; cursor: pointer;">
                                             </th>
                                         </tr>
 
                                         <tr role="row">
-                                            <th class="text-center bg-primary text-white">No</th>
+                                            <th class="text-center bg-primary text-white" style="width: 5%;">No.</th>
                                             <th class="text-center bg-primary text-white">Item</th>
                                             <th class="text-center bg-primary text-white">Kuantiti</th>
                                             <th class="text-center bg-primary text-white">Harga</th>
-                                            <th class="text-center bg-primary text-white"  style="width: 20%;">Total</th>
+                                            <th class="text-center bg-primary text-white" style="width: 20%;">Total</th>
                                             <th class="text-center bg-primary text-white"></th>
                                         </tr>
                                     </thead>
@@ -80,5 +80,3 @@
         </div>
     </div>
 @endsection
-
-{!! Html::script('js/purchase.js') !!}
