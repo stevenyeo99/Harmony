@@ -89,6 +89,38 @@
     @endif
 
     <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Laporan
+    </div>
+
+    @if(Gate::allows('is-admin'))
+        <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
+            <a class="nav-link" href="{{ route('manage.user') }}">
+                <i class="fas fa-users"></i>
+                <span>Item</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
+            <a class="nav-link" href="{{ route('manage.user') }}">
+                <i class="fas fa-users"></i>
+                <span>Pembelian</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
+            <a class="nav-link" href="{{ route('manage.user') }}">
+                <i class="fas fa-users"></i>
+                <span>Penjualan</span>
+            </a>
+        </li>
+    @endif
+
+
+    <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->

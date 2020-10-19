@@ -86,6 +86,19 @@ class HsPurchaseController extends MasterController {
     }
 
     /**
+     * get item by supplier
+     */
+    public function getSupplierItem($splr_id) {
+        $hsItemDetail = new HsItemDetail();
+
+        $hsItemDetailData = $hsItemDetail::where('splr_id', $splr_id)
+            ->where('status', StatusType::ACTIVE)
+            ->get();
+
+        return response()->json($hsItemDetailData, 200);
+    }
+
+    /**
      * display create method
      */
     public function create() {

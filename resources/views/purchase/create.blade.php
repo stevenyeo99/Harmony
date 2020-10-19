@@ -58,7 +58,7 @@
                                             </th>
 
                                             <th>
-                                                {{ Form::text('sub_total', null, array('class' => 'w-100 form-control text-filter', 'readonly' => true)) }}
+                                                {{ Form::text('sub_total', null, array('id' => 'sub_total', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
                                             </th>
 
                                             <th></th>
@@ -71,7 +71,7 @@
                         <div class="form-group form-inline text-right">
                             <div class="col-sm-12">
                                 {{ Form::button('Back', array('class' => 'btn btn-secondary', 'id' => 'btnBack', 'data-toggle' => 'modal', 'data-target' => '#backModal')) }}
-                                {{ Form::button('Save', array('class' => 'btn btn-primary', 'id' => 'btnSave', 'data-toggle' => 'modal', 'data-target' => '#confirmModal')) }}
+                                {{ Form::button('Save', array('class' => 'btn btn-primary', 'id' => 'btnSave', 'data-target' => '#confirmModal')) }}
                             </div>
                         </div>
                     {!! Form::close() !!}

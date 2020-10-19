@@ -90,3 +90,10 @@ function removeNumberFormat(number) {
 
     return number;
 }
+
+function scrollTo(element)
+{
+    $('html, body').stop().animate({
+        scrollTop: element.offset().top
+    }, 1000);
+}

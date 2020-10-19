@@ -105,8 +105,8 @@ Route::prefix('/manage_purchase')->group(function() {
     Route::get('/create', 'HsPurchaseController@create')->name('manage.purchase.create');
     Route::post('/create', 'HsPurchaseController@store')->name('manage.purchase.store');
 
-    // ajax request
-    Route::get('/supplier_item/{splr_id}', 'HsPurchaseController@getSupplierItem')->name('manage.purchase.getSupplierItem');
+    // ajax request component form
+    Route::get('/ajax/supplier_item/{splr_id}', 'HsPurchaseController@getSupplierItem')->name('manage.purchase.getSupplierItem');
 });
 
 // manage invoice module

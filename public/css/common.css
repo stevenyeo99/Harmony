@@ -6,3 +6,13 @@
 .amountPercentInput {
     text-align: right;
 }
+
+#addItem:hover {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+}
+
+.deleteItemRow:hover {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+}

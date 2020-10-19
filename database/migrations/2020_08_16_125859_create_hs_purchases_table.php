@@ -18,7 +18,7 @@ class CreateHsPurchasesTable extends Migration
             $table->integer('splr_id')->unsigned();
             $table->decimal('sub_total', 38, 2);
             $table->datetime('purchase_datetime');
-            $table->string('po_no', 20)->unique();
+            $table->string('po_no', 20)->unique()->nullable();
             $table->string('status', 10);
             $table->foreign('splr_id')->references('splr_id')->on('hs_supplier');
         });
