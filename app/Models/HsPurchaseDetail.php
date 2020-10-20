@@ -11,7 +11,7 @@ class HsPurchaseDetail extends BaseModel
     protected $primaryKey = 'prdt_id';
 
     protected $fillable = [
-        'prch_id', 'itdt_id', 'quantity', 'sub_total'
+        'prch_id', 'itdt_id', 'quantity', 'sub_total', 'price',
     ];
     
     public function hsPurchase() {

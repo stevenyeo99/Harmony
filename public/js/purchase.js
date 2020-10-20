@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    initializeDatePicker();
     addNewRowItemDetail();
     dropdownSupplierEvent();
     initializeChosenDropdown();
@@ -10,6 +11,12 @@ $(document).ready(function() {
 
 // used for itemdetail list
 var globalItemDetailList = [];
+
+function initializeDatePicker() {
+    $('#purchase_datetime').datepicker({
+        dateFormat: 'yy-mm-dd',
+    });
+}
 
 function deleteRowItemDetail(deleteIcon) {
     var currentRow = deleteIcon.parent().parent();
@@ -24,8 +31,12 @@ function deleteRowItemDetail(deleteIcon) {
 function resetItemBodyDetails() {
     var number = 1;
     $('#tablePurchaseDetail tbody tr').each(function() {
-        var currentRow = $(this).find('td:eq(0)');
-        currentRow.text(number + '.');
+        var currentRow = $(this);
+        currentRow.find('td:eq(0)').text(number + '.');
+        currentRow.find('td:eq(1) select').attr('name', 'itdt[' +  number + '][itdt_id]');
+        currentRow.find('td:eq(2) input').attr('name', 'itdt[' +  number + '][quantity]');
+        currentRow.find('td:eq(3) input').attr('name', 'itdt[' +  number + '][price]');
+        currentRow.find('td:eq(4) input').attr('name', 'itdt[' +  number + '][sub_total]');
         number++;
     });
 }
@@ -137,13 +148,12 @@ function setItemDetailDropdown() {
 function setItemDetailPrice() {
     $('.ddlChosen').change(function() {
         var element = $(this);
+        var priceElement = $(this).parent().parent().find('td:eq(3) input');
+        var subTotal = $(this).parent().parent().find('td:eq(4) input');
         if (element.val() !== '') {
             for (var index in globalItemDetailList) {
                 var itdt_id = parseInt(element.val());
-                if (itdt_id === globalItemDetailList[index].itdt_id) {
-                   
-                    var priceElement = $(this).parent().parent().find('td:eq(3) input');
-                    
+                if (itdt_id === globalItemDetailList[index].itdt_id) {                  
                     priceElement.val(getPriceFormattedNumber(globalItemDetailList[index].price, 2));
 
                     var quantityElement = $(this).parent().parent().find('td:eq(2) input');
@@ -153,6 +163,11 @@ function setItemDetailPrice() {
                     }
                 }
             }
+        } else {
+            // set price empty
+            priceElement.val('');
+            subTotal.val('');
+            setSubTotalPurchaseItem();
         }
     });
 }
@@ -214,26 +229,52 @@ function validatePurchaseForm() {
     
     // validate purchase form
     // 1. supplier dropdown
-    // 2. each item detail
+    // 2. purchase date cannot empty
+    // 3. validate must exist at least 1 item
+    // 4. each item detail
+    // 5. validate cannot duplicated item detail
 
     var supplier = $('#splr_id');
 
     if (supplier.val() === '') {
         alert('Supplier wajib dipilih untuk melakukan pembelian!');
-        scrollTo(supplier.next().attr('id'));
+        scrollTo(supplier.next());
         supplier.focus();
         return false;
     }
 
+    var purchase_datetime = $('#purchase_datetime');
+
+    if (purchase_datetime.val() === '') {
+        alert('Tanggal PO wajib dipilih');
+        scrollTo(purchase_datetime);
+        purchase_datetime.focus();
+        return false;
+    }
+
     var itemDetailRow = $('#tablePurchaseDetail tbody tr');
+
+    if (itemDetailRow.length == 0) {
+        alert('Tidak terdapat item yang akan dibeli!');
+        $('#addItem').click();
+        return false;
+    }
+
     var index = 1;
+    var itdtValidArr = [];
     itemDetailRow.each(function() {
         var currentRow = $(this);
         var itdt_id = $(this).find('td:eq(1) select');
         var quantity = $(this).find('td:eq(2) input');
         
         if (itdt_id.val() === '') {
-            alert('Item Pembelian pada baris no. ' + index + ' Harap dipilih');
+            alert('Item Pembelian pada baris no. ' + index + ' harap dipilih');
+            scrollTo(itdt_id.next());
+            itdt_id.next().addClass('chosen-container-active');
+            valid = false;
+            return false;
+        } else if (itdtValidArr.includes(itdt_id.val())) {
+            alert('Item Pembelian pada baris no. ' + index + ' terjadi duplikat pemilihan');
             scrollTo(itdt_id.next());
             itdt_id.next().addClass('chosen-container-active');
             valid = false;
@@ -248,6 +289,7 @@ function validatePurchaseForm() {
             return false;
         }
 
+        itdtValidArr.push(itdt_id.val());
         index++;
     });
 

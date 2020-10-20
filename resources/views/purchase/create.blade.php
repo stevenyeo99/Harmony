@@ -28,6 +28,14 @@
                         </div>
 
                         <div class="form-group form-inline">
+                            {{ Form::label('purchase_datetime', 'Tanggal PO :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0')) }}
+
+                            <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
+                                {{ Form::text('purchase_datetime', old('purchase_datetime'), array('id' => 'purchase_datetime', 'class' => 'form-control w-100', 'readonly' => true)) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group form-inline">
                             <div class="table-responsive">
                                 <table class="table table-bordered hover compact" id="tablePurchaseDetail">
                                     <thead>

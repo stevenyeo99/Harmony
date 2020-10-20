@@ -98,7 +98,7 @@
 
             $('input.text-filter').on('keyup', function() {
                 var i = $(this).attr('data-column');
-                var v = $(this).val();
+                var v = $(this).val();               
                 dtTable.column(i).search(v).draw();
             });
 
