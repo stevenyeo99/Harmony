@@ -104,6 +104,11 @@ Route::prefix('/manage_purchase')->group(function() {
     Route::get('/list', 'HsPurchaseController@displayData')->name('manage.purchase.list');
     Route::get('/create', 'HsPurchaseController@create')->name('manage.purchase.create');
     Route::post('/create', 'HsPurchaseController@store')->name('manage.purchase.store');
+    Route::get('/view/{id}', 'HsPurchaseController@view')->name('manage.purchase.view');
+    Route::get('/edit/{id}', 'HsPurchaseController@edit')->name('manage.purchase.edit');
+    Route::post('/update/{id}', 'HsPurchaseController@update')->name('manage.purchase.update');
+    Route::post('/approve/{id}', 'HsPurchaseController@approve')->name('manage.purchase.approve');
+    Route::post('/delete/{id}', 'HsPurchaseController@delete')->name('manage.purchase.delete');
     
     // ajax request component form
     Route::get('/ajax/supplier_item/{splr_id}', 'HsPurchaseController@getSupplierItem')->name('manage.purchase.getSupplierItem');

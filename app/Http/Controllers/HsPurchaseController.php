@@ -14,6 +14,7 @@ use Yajra\Datatables\Datatables;
 use App\Enums\StatusType;
 use App\Enums\ActionType;
 use App\Enums\ChangeType;
+use Carbon\Carbon;
 
 class HsPurchaseController extends MasterController {
     
@@ -37,22 +38,23 @@ class HsPurchaseController extends MasterController {
     public function displayData() {
         $rsPurchase = HsPurchase::join('hs_supplier', 'hs_supplier.splr_id', '=', 'hs_purchase.splr_id')
             ->select(['prch_id', 'po_no', 'hs_supplier.splr_id as splr_id', 'hs_supplier.name as supplier_name', 'sub_total', 'purchase_datetime', 'hs_purchase.status as status']);
-        
+
         return DataTables::of($rsPurchase)
             ->addColumn('action', function($purchase) {
-                // $btn = "<a href='" . $this->getRoute('view', $purchase->prch_id) ."' class='btn btn-info btn-sm'>Lihat</a>";
-                // $btn .= " <a href='" . $this->getRoute('edit', $purchase->prch_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
-                // if ($purchase->status == StatusType::ACTIVE) {
-                //     $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $purchase->prch_id) . "\");'>Hapus</button>";
-                // }
+                $btn = "<a href='" . $this->getRoute('view', $purchase->prch_id) ."' class='btn btn-info btn-sm'>Lihat</a>";
+                $btn .= " <a href='" . $this->getRoute('edit', $purchase->prch_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
+                if ($purchase->status == StatusType::ACTIVE) {
+                    $btn .= " <button class='btn btn-success btn-sm'>Terima</button>";
+                    $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $purchase->prch_id) . "\");'>Hapus</button>";
+                }
                 
-                return 'test';
+                return $btn;
             })
             ->editColumn('status', function($purchase) {
-                $label = "<span class='badge badge-success'>" . $purchase->prch_id . "</span>";
+                $label = "<span class='badge badge-success'>" . $purchase->status . "</span>";
 
                 if ($purchase->status == 'INACTIVE') {
-                    $label = "<span class='badge badge-danger'>" . $purchase->prch_id . "</span>";
+                    $label = "<span class='badge badge-danger'>" . $purchase->status . "</span>";
                 }
 
                 return $label;
@@ -60,8 +62,20 @@ class HsPurchaseController extends MasterController {
             ->editColumn('splr_id', function($purchase) {
                 return $purchase->supplier_name;
             })
+            ->editColumn('sub_total', function($purchase) {
+                    return number_format($purchase->sub_total, 2);
+            })
+            ->editColumn('purchase_datetime', function($purchase) {
+                $date = Carbon::parse($purchase->purchase_datetime)->format('Y-m-d');
+                return $date; 
+            })
             ->filterColumn('splr_id', function($query, $keyword) {
                 $query->where('hs_purchase.splr_id', $keyword);
+            })
+            ->filterColumn('purchase_datetime', function($query, $keyword) {
+                if ($keyword) {
+                    $query->whereDate('purchase_datetime', '=', $keyword);
+                }
             })
             ->filterColumn('status', function($query, $keyword) {
                 $query->where('hs_purchase.status', $keyword);
@@ -155,14 +169,48 @@ class HsPurchaseController extends MasterController {
             
             DB::commit();
             
-            $this->setFlashMessage('success', 'Sukses');
+            $this->setFlashMessage('success', $hsPurchase->messages('success', 'create'));
             return redirect($this->getRoute('create'));
         } catch (\Exception $e) {
             DB::rollback();
             return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('create'), $e);
         }
+    }
 
-        dd($data);
+    public function view($id) {
+        $title = $this->getTitle("view_purchase");
+
+        $purchaseActive = "active";
+
+        $poNo = $this->generatePoNo();
+
+        $purchaseObj = HsPurchase::find($id);
+
+        return view('purchase.view', compact('title', 'purchaseActive', 'purchaseObj', 'poNo'));
+    }
+
+    public function edit($id) {
+        $title = $this->getTitle("edit_purchase");
+
+        $purchaseActive = "active";
+
+        $poNo = $this->generatePoNo();
+
+        $purchaseObj = HsPurchase::find($id);
+
+        return view('purchase.edit', compact('title', 'purchaseActive', 'purchaseObj', 'poNo'));
+    }
+
+    public function update(Request $request, $id) {
+
+    }
+
+    public function approve(Request $request, $id) {
+
+    }
+
+    public function delete(Request $request, $id) {
+
     }
 
     public function getRoute($key, $id = null) {
@@ -175,6 +223,8 @@ class HsPurchaseController extends MasterController {
                 return route('manage.purchase.view', $id);
             case 'edit':
                 return route('manage.purchase.edit', $id);
+            case 'approve':
+                return route('manage.purchase.approve', $id);
             case 'delete':
                 return route('manage.purchase.delete', $id);
             default:

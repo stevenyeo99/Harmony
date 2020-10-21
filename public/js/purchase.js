@@ -7,6 +7,7 @@ $(document).ready(function() {
     setSubTotalEachItemDetail();
     setSubTotalPurchaseItem();
     submitPurchaseForm();
+    resetItemBodyDetails();
 });
 
 // used for itemdetail list

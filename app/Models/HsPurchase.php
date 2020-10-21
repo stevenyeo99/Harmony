@@ -13,11 +13,15 @@ class HsPurchase extends BaseModel
     protected $fillable = ['splr_id', 'sub_total', 'purchase_datetime', 'po_no', 'status'];
 
     public function hsPurchaseDetail() {
-        return $this->hasMany('App\Models\HsPurchaseDetail');
+        return $this->hasMany('App\Models\HsPurchaseDetail', 'prch_id');
+    }
+
+    public function hsSupplier() {
+        return $this->belongsTo('App\Models\HsSupplier', 'splr_id');
     }
 
     public function hsPurchaseLog() {
-        return $this->hasMany('App\Models\HsPurchaseLog');
+        return $this->hasMany('App\Models\HsPurchaseLog', 'prch_id');
     }
 
     public function hsItemStockLog() {
@@ -26,5 +30,21 @@ class HsPurchase extends BaseModel
 
     public function errors() {
         return $this->errors;
+    }
+
+    public function messages(string $key, string $keyTwo = null) {
+        switch ($key) {
+            case 'success':
+                case 'create':
+                    return 'Telah membuat pembelian dengan sukses!';
+                case 'update':
+                    return 'Telah memperbarui pembelian dengan sukses!';
+                case 'delete';
+                    return 'Telah menghapus pembelian dengan sukses!';
+                case 'approve':
+                    return 'Penjualan telah tersimpan dalam transaksi!';
+                default:
+                    break;
+        }
     }
 }

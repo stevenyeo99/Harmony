@@ -20,8 +20,8 @@
                                 <tr role="row">
                                     <th class="text-center bg-primary text-white">Kode</th>
                                     <th class="text-center bg-primary text-white">Supplier</th>
-                                    <th class="text-center bg-primary text-white">Total</th>
-                                    <th class="text-center bg-primary text-white">Waktu Pembelian</th>
+                                    <th class="text-center bg-primary text-white">Biaya</th>
+                                    <th class="text-center bg-primary text-white">Tanggal Pembelian</th>
                                     <th class="text-center bg-primary text-white">Status</th>
                                     <th class="text-center bg-primary text-white">Aksi</th>
                                 </tr>
@@ -40,11 +40,11 @@
                                     </td>
 
                                     <td class="bg-primary text-white">
-                                        {{ Form::text('purchase_datetime', null, array('id' => 'purchase_datetime', 'class' => 'w-100 form-control date-filter', 'data-column' => '2', 'readonly' => true, 'style' => 'text-align: center;')) }}
+                                        {{ Form::text('purchase_datetime', null, array('id' => 'purchase_datetime', 'class' => 'w-100 form-control date-filter', 'data-column' => '3', 'readonly' => true, 'style' => 'text-align: center;')) }}
                                     </td>
 
                                     <td class="bg-primary text-white">
-                                        {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '3')) }}
+                                        {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '4')) }}
                                     </td>
 
                                     <td class="bg-primary text-white">
@@ -52,8 +52,6 @@
                                     </td>
                                 </tr>
                             </thead>
-
-                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -88,7 +86,17 @@
                     { data: 'sub_total', name: 'sub_total' },
                     { data: 'purchase_datetime', name: 'purchase_datetime' },
                     { data: 'status', name: 'status' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false, width: '20%' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false, width: '25%' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 2,
+                        className: 'dt-body-right',
+                    },
+                    {
+                        targets: 3,
+                        className: 'dt-body-center',
+                    }
                 ],
                 responsive: true,
                 language: {
@@ -118,7 +126,7 @@
                 dtTable.column(i).search(v).draw();
             });
 
-            dtTable.column(3).search("ACTIVE").draw();
+            dtTable.column(4).search("ACTIVE").draw();
         }
     </script>
 @endpush
