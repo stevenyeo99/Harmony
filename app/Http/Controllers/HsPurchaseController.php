@@ -186,6 +186,9 @@ class HsPurchaseController extends MasterController {
 
         $purchaseObj = HsPurchase::find($id);
 
+        $supplierModel = new HsSupplier();
+        $listOfSupplier = $supplierModel->getSupplier();
+
         return view('purchase.view', compact('title', 'purchaseActive', 'purchaseObj', 'poNo'));
     }
 
@@ -198,7 +201,16 @@ class HsPurchaseController extends MasterController {
 
         $purchaseObj = HsPurchase::find($id);
 
-        return view('purchase.edit', compact('title', 'purchaseActive', 'purchaseObj', 'poNo'));
+        $supplierModel = new HsSupplier();
+        $listOfSupplier = $supplierModel->getSupplier();
+
+        $hsItemDetail = new HsItemDetail();
+
+        $hsItemDetailData = $hsItemDetail::where('splr_id', $purchaseObj->splr_id)
+            ->where('status', StatusType::ACTIVE)
+            ->get();
+
+        return view('purchase.edit', compact('title', 'purchaseActive', 'purchaseObj', 'poNo', 'listOfSupplier', 'hsItemDetailData'));
     }
 
     public function update(Request $request, $id) {

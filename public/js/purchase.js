@@ -8,6 +8,7 @@ $(document).ready(function() {
     setSubTotalPurchaseItem();
     submitPurchaseForm();
     resetItemBodyDetails();
+    $('#splr_id').change();
 });
 
 // used for itemdetail list
@@ -91,7 +92,11 @@ function dropdownSupplierEvent() {
             method: "GET",
             success: function(data) {
                 globalItemDetailList = data;
-                configureEachItemDetail();
+                if ($('#txtFirst').val() === 'true') {
+                    $('#txtFirst').val('');
+                } else {
+                    configureEachItemDetail();
+                }
             },
             error: function(data) {
                 console.log(data);
@@ -191,7 +196,6 @@ function setSubTotalEachItemDetail() {
 
             for (var index in globalItemDetailList) {
                 if (itdt_id === globalItemDetailList[index].itdt_id) {
-                    // validate item quantity cannot exceed then limit
                     var price = parseFloat(globalItemDetailList[index].price);
                     var currentQty = parseFloat(element.val());
                     

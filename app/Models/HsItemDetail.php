@@ -21,6 +21,10 @@ class HsItemDetail extends BaseModel
 
     public $timestamps = false;
 
+    public function hsPurchaseDetail() {
+        return $this->hasMany('App\Models\HsItemDetail', 'itdt_id');
+    }
+
     public function hsItemDetailLog() {
         return $this->hasMany('App\Models\HsItemDetailLog');
     }
