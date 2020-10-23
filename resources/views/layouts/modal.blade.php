@@ -72,6 +72,24 @@
     </div>
 </div>
 
+<!-- approve modal -->
+<div class="modal fade" id="approveModal" tabIndex="1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Apakah anda yakin untuk menyetujui data berikut ?
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Tidak</button>
+                {!! Form::open(array('id' => 'frmModalApprove', 'method' => 'POST')) !!}
+                    <input id="btnAccConfirm" type="button" value="Setuju" class="btn btn-success">
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script type="text/javascript">
     $(document).ready(function() {

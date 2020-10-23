@@ -10,6 +10,8 @@
         @include('layouts.css')
         <!-- end css -->
 
+        <link rel="shortcut icon" href="/img/ico.ico">
+        
         <script>
             window.Laravel = <?php echo json_encode([
                 'csrfToken' => csrf_token(),

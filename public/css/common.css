@@ -16,3 +16,79 @@
     width: 2.5rem !important;
     height: 2.5rem !important;
 }
+
+.glowing-button {
+    border: none;
+    -webkit-animation: glowing 1500ms infinite;
+    -moz-animation: glowing 1500ms infinite;
+    -o-animation: glowing 1500ms infinite;
+    animation: glowing 1500ms infinite;
+}
+
+@-webkit-keyframes glowing {
+    0% {
+        background-color: #3c8dbc;
+        -webkit-box-shadow: 0 0 3px #3c8dbc;
+    }
+
+    50% {
+        background-color:#32a852;
+        -webkit-box-shadow: 0 0 40px#32a852;
+    }
+
+    100% {
+        background-color: #3c8dbc;
+        -webkit-box-shadow: 0 0 3px #3c8dbc;
+    }
+}
+
+@-moz-keyframes glowing {
+    0% {
+        background-color: #3c8dbc;
+        -moz-box-shadow: 0 0 3px #3c8dbc;
+    }
+
+    50% {
+        background-color: #32a852;
+        -moz-box-shadow: 0 0 40px#32a852;
+    }
+
+    100% {
+        background-color: #3c8dbc;
+        -moz-box-shadow: 0 0 3px #3c8dbc;
+    }
+}
+
+@-o-keyframes glowing {
+    0% {
+        background-color: #3c8dbc;
+        box-shadow: 0 0 3px #3c8dbc;
+    }
+
+    50% {
+        background-color: #32a852;
+        box-shadow: 0 0 40px#32a852;
+    }
+
+    100% {
+        background-color:#32a852;
+        box-shadow: 0 0 3px#32a852;
+    }
+}
+
+@keyframes glowing {
+    0% {
+        background-color: #3c8dbc;
+        box-shadow: 0 0 3px #3c8dbc;
+    }
+
+    50% {
+        background-color: #32a852;
+        box-shadow: 0 0 40px#32a852;
+    }
+
+    100% {
+        background-color: #3c8dbc;
+        box-shadow: 0 0 3px #3c8dbc;
+    }
+}

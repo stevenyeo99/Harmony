@@ -11,6 +11,7 @@
                 </div>
 
                 <div class="card-body">
+                    {!! Form::open(array('url' => route('manage.purchase.update', $purchaseObj->prch_id), 'method' => 'POST', 'id' => 'frm'))  !!}
                     <div class="form-group form-inline">
                         {{ Form::label('po_no', 'PO :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0')) }}
 
@@ -100,6 +101,14 @@
                             </table>
                         </div>
                     </div>
+
+                    <div class="form-group form-inline text-right">
+                        <div class="col-sm-12">
+                            {{ Form::button('Back', array('class' => 'btn btn-secondary', 'id' => 'btnBack', 'data-toggle' => 'modal', 'data-target' => '#backModal')) }}
+                            {{ Form::button('Save', array('class' => 'btn btn-primary', 'id' => 'btnSave', 'data-target' => '#confirmModal')) }}
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
         </div>

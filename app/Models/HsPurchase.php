@@ -35,16 +35,18 @@ class HsPurchase extends BaseModel
     public function messages(string $key, string $keyTwo = null) {
         switch ($key) {
             case 'success':
-                case 'create':
-                    return 'Telah membuat pembelian dengan sukses!';
-                case 'update':
-                    return 'Telah memperbarui pembelian dengan sukses!';
-                case 'delete';
-                    return 'Telah menghapus pembelian dengan sukses!';
-                case 'approve':
-                    return 'Penjualan telah tersimpan dalam transaksi!';
-                default:
-                    break;
+                switch ($keyTwo) {
+                    case 'create':
+                        return 'Telah membuat pembelian dengan sukses!';
+                    case 'update':
+                        return 'Telah memperbarui pembelian dengan sukses!';
+                    case 'delete';
+                        return 'Telah menghapus pembelian dengan sukses!';
+                    case 'approve':
+                        return 'Penjualan telah tersimpan dalam transaksi!';
+                }
+            default:
+                break;
         }
     }
 }

@@ -8,6 +8,8 @@
         <title>Harmony System</title>
         
         @include('layouts.css')
+
+        <link rel="shortcut icon" href="/img/ico.ico">
     </head>
     <body class="bg-gradient-light">
         @yield('content')

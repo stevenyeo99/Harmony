@@ -1,6 +1,7 @@
 $(document).ready(function () {
     save();
     trigProcessingDelete();
+    trigProcessingApprove();
     bindAmountOnChange();
 });
 
@@ -15,9 +16,20 @@ function trigDeleteModalBtn(data) {
     $('#deleteModal').modal();
 }
 
+function trigApproveModalBtn(data) {
+    $('#frmModalApprove').attr('action', data);
+    $('#approveModal').modal();
+}
+
 function trigProcessingDelete() {
     $('#btnDelConfirm').click(function() {
         $('#frmModalDelete').submit();
+    });
+}
+
+function trigProcessingApprove() {
+    $('#btnAccConfirm').click(function() {
+        $('#frmModalApprove').submit();
     });
 }
 

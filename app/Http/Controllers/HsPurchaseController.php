@@ -8,6 +8,7 @@ use App\Models\HsPurchaseDetail;
 use App\Models\HsPurchaseLog;
 use App\Models\HsItemDetail;
 use App\Models\HsSupplier;
+use App\Models\HsItemStockLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Yajra\Datatables\Datatables;
@@ -42,9 +43,9 @@ class HsPurchaseController extends MasterController {
         return DataTables::of($rsPurchase)
             ->addColumn('action', function($purchase) {
                 $btn = "<a href='" . $this->getRoute('view', $purchase->prch_id) ."' class='btn btn-info btn-sm'>Lihat</a>";
-                $btn .= " <a href='" . $this->getRoute('edit', $purchase->prch_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
-                if ($purchase->status == StatusType::ACTIVE) {
-                    $btn .= " <button class='btn btn-success btn-sm'>Terima</button>";
+                if ($purchase->status == StatusType::ACTIVE && !isset($purchase->po_no)) {
+                    $btn .= " <a href='" . $this->getRoute('edit', $purchase->prch_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
+                    $btn .= " <button class='btn text-white btn-sm glowing-button' onclick='trigApproveModalBtn(\"" . $this->getRoute("approve", $purchase->prch_id) . "\");'>Terima</button>";
                     $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $purchase->prch_id) . "\");'>Hapus</button>";
                 }
                 
@@ -214,15 +215,130 @@ class HsPurchaseController extends MasterController {
     }
 
     public function update(Request $request, $id) {
+        $data = Input::all();
 
+        try {
+            DB::beginTransaction();
+
+            // initiate hs_purchase and update
+            $hsPurchase = HsPurchase::find($id);
+            $hsPurchase->splr_id = $data['splr_id'];
+            $hsPurchase->sub_total = str_replace(',', '', $data['sub_total']);
+            $hsPurchase->purchase_datetime = $data['purchase_datetime'];
+            $hsPurchase->status = StatusType::ACTIVE;
+            $hsPurchase->save();
+
+            // delete the previous purchase detail for easy logic and reinsert
+            HsPurchaseDetail::where('prch_id', $hsPurchase->prch_id)->delete();
+            $itemDetailData = $data['itdt'];
+            $hsPurchaseDetails = [];
+            foreach ($itemDetailData as $itdt) {
+                $hsPurchaseDetails[] = array (
+                    'prch_id' => $hsPurchase->prch_id,
+                    'itdt_id' => $itdt['itdt_id'],
+                    'quantity' => str_replace(',', '', $itdt['quantity']),
+                    'sub_total' => str_replace(',', '', $itdt['sub_total']),
+                    'price' => str_replace(',', '', $itdt['price']),
+                );
+            }
+            HsPurchaseDetail::insert($hsPurchaseDetails);
+
+            // initiate hs_purchase_log
+            $hsPurchaseLog = new HsPurchaseLog();
+            $hsPurchaseLog->prch_id = $hsPurchase->prch_id;
+            $hsPurchaseLog->action = ActionType::EDIT;
+            $hsPurchaseLog->user_id = auth()->user()->user_id;
+            $hsPurchaseLog->log_date_time = now();
+            $hsPurchaseLog->save();
+
+            DB::commit();
+
+            $this->setFlashMessage('success', $hsPurchase->messages('success', 'update'));
+            return redirect($this->getRoute('index'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit', $id), $e);
+        }
     }
 
+    /**
+     * approve purchase data: 
+     */
     public function approve(Request $request, $id) {
+        try {
+            DB::beginTransaction();
+            
+            // 1. generate purchase no
+            $hsPurchase = HsPurchase::find($id);
+            $hsPurchase->po_no = $this->generatePoNo();
+            $hsPurchase->save();
 
+            // 2. add data into action log
+            $hsPurchaseLog = new HsPurchaseLog();
+            $hsPurchaseLog->prch_id = $hsPurchase->prch_id;
+            $hsPurchaseLog->action = ActionType::EDIT;
+            $hsPurchaseLog->user_id = auth()->user()->user_id;
+            $hsPurchaseLog->log_date_time = now();
+            $hsPurchaseLog->save();
+
+            // 3. new data for item stock log
+            $hsItemStockLogs = [];
+            $hsPurchaseDetails = HsPurchaseDetail::where('prch_id', $hsPurchase->prch_id)->get();
+            foreach ($hsPurchaseDetails as $hsPurchaseDetail) {
+                $originalQuantity = $hsPurchaseDetail->hsItemDetail->quantity;
+                if (!isset($originalQuantity)) {
+                    $originalQuantity = '0.00';
+                }
+
+                $hsItemStockLogs[] = array (
+                    'itdt_id' => $hsPurchaseDetail->itdt_id,
+                    'original_quantity' => $originalQuantity,
+                    'add_quantity' => $hsPurchaseDetail->quantity,
+                    'min_quantity' => '0.00',
+                    'prdt_id' => $hsPurchaseDetail->prdt_id,
+                    'ivdt_id' => null,
+                    'change_type' => ChangeType::PURCHASE,
+                    'change_time' => now(),
+                    'user_id' => auth()->user()->user_id,
+                    'new_quantity' => number_format(floatval($originalQuantity) + floatval($hsPurchaseDetail->quantity), 2),
+                    'description' => 'Transaksi pembelian item pada PO: ' . $hsPurchase->po_no,
+                );
+            }
+            HsItemStockLog::insert($hsItemStockLogs);
+
+            DB::commit();
+
+            $this->setFlashMessage('success', $hsPurchase->messages('success', 'approve'));
+            return redirect($this->getRoute('index'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('index'), $e);
+        }
     }
 
     public function delete(Request $request, $id) {
+        try {
+            DB::beginTransaction();
+            
+            $hsPurchase = HsPurchase::find($id);
+            $hsPurchase->status = StatusType::INACTIVE;
+            $hsPurchase->save();
 
+            $hsPurchaseLog = new HsPurchaseLog();
+            $hsPurchaseLog->prch_id = $hsPurchase->prch_id;
+            $hsPurchaseLog->action = ActionType::TERMINATE;
+            $hsPurchaseLog->user_id = auth()->user()->user_id;
+            $hsPurchaseLog->log_date_time = now();
+            $hsPurchaseLog->save();
+
+            DB::commit();
+
+            $this->setFlashMessage('success', $hsPurchase->messages('success', 'delete'));
+            return redirect($this->getRoute('index'));
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('index'), $e);
+        }
     }
 
     public function getRoute($key, $id = null) {
