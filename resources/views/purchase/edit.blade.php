@@ -105,7 +105,7 @@
                     <div class="form-group form-inline text-right">
                         <div class="col-sm-12">
                             {{ Form::button('Back', array('class' => 'btn btn-secondary', 'id' => 'btnBack', 'data-toggle' => 'modal', 'data-target' => '#backModal')) }}
-                            {{ Form::button('Save', array('class' => 'btn btn-primary', 'id' => 'btnSave', 'data-target' => '#confirmModal')) }}
+                            {{ Form::button('Save', array('class' => 'btn btn-primary', 'id' => 'btnPOSave', 'data-target' => '#confirmModal')) }}
                         </div>
                     </div>
                     {!! Form::close() !!}

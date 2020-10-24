@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class HsPurchaseLog extends BaseModel
 {
     protected $table = 'hs_purchase_log';
+
+    protected $primaryKey = 'prlg_id';
 }

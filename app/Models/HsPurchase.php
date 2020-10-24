@@ -43,7 +43,7 @@ class HsPurchase extends BaseModel
                     case 'delete';
                         return 'Telah menghapus pembelian dengan sukses!';
                     case 'approve':
-                        return 'Penjualan telah tersimpan dalam transaksi!';
+                        return 'Pembelian telah tersimpan dalam transaksi!';
                 }
             default:
                 break;

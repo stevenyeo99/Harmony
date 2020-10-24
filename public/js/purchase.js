@@ -305,7 +305,7 @@ function validatePurchaseForm() {
  * method for submit purchase request
  */
 function submitPurchaseForm() {
-    $('#btnSave').click(function() {
+    $('#btnPOSave').click(function() {
         if (validatePurchaseForm()) {
             $('#confirmModal').modal('show');
         } 

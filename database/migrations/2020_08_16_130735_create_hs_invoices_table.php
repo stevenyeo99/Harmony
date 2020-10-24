@@ -17,7 +17,7 @@ class CreateHsInvoicesTable extends Migration
             $table->increments('invc_id');
             $table->decimal('sub_total', 38, 2);
             $table->datetime('invoice_datetime');
-            $table->string('invoice_no', 20)->unique();
+            $table->string('invoice_no', 20)->unique()->nullable();
             $table->string('status', 10);
             $table->decimal('paid_amt', 38, 2);
             $table->decimal('return_amt', 38, 2);

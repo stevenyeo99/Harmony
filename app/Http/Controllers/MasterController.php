@@ -61,6 +61,9 @@ class MasterController extends Controller {
             case 'manage_purchase':
                 $title = "Manajemen Pembelian";
                 break;
+            case 'manage_invoice':
+                $title = "Manajemen Penjualan";
+                break;
             case 'manage_item_stock':
                 $title = "Detail Transaksi Stock Item " . $key2;
                 break;
@@ -76,6 +79,9 @@ class MasterController extends Controller {
             case 'create_purchase':
                 $title = "Buat Pembelian";
                 break;
+            case 'create_invoice':
+                $title = "Buat Transaksi Penjualan";
+                break;
             case 'view_item_detail':
                 $title = "Detail Item";
                 break;
@@ -88,6 +94,9 @@ class MasterController extends Controller {
             case 'view_purchase':
                 $title = "Detail Pembelian";
                 break;
+            case 'view_invoice':
+                $title = "Detail Penjualan";
+                break;
             case 'edit_item_detail':
                 $title = "Edit Item";
                 break;
@@ -99,6 +108,9 @@ class MasterController extends Controller {
                 break;
             case 'edit_purchase':
                 $title = "Edit Pembelian";
+                break;
+            case 'edit_invoice':
+                $title = "Edit Transaksi Penjualan";
                 break;
             case 'edit_item_stock':
                 $title = "Atur Kuantiti Stock Item " . $key2;

@@ -11,7 +11,8 @@
                 </div>
 
                 <div class="card-body">
-                    {!! Form::open(array('url' => route('manage.invoice.update', $invoiceObj->invc_id), 'method' => 'POST', 'id' => 'frm'))  !!}
+                    {!! Form::open(array('url' => route('manage.invoice.create'), 'method' => 'POST', 'id' => 'frm')) !!}
+                        @csrf
                         <div class="form-group form-inline">
                             {{ Form::label('invoice_no', 'Transaksi no :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0')) }}
 
@@ -22,7 +23,7 @@
                             {{ Form::label('invoice_datetime', 'Tanggal Transaksi :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0')) }}
 
                             <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                                {{ Form::text('invoice_datetime', \Carbon\Carbon::parse($invoiceObj->invoice_datetime)->format('Y-m-d'), array('id' => 'invoice_datetime', 'class' => 'form-control w-100', 'readonly' => true)) }}
+                                {{ Form::text('invoice_datetime', \Carbon\Carbon::parse(now())->format('Y-m-d'), array('id' => 'invoice_datetime', 'class' => 'form-control w-100', 'readonly' => true)) }}
                             </div>
                         </div>
 
@@ -46,33 +47,7 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
-                                        @foreach ($invoiceObj->hsInvoiceDetail as $itemDetail)
-                                            <tr>
-                                                <td style="text-align: right;"></td>
-                                                <td class="text-center">
-                                                    <select class='ddlChosen'>
-                                                        <option value = ''>-- Pilih Item --</option>
-                                                        @foreach ($hsItemDetailData as $itdt)
-                                                            <option value = '{{ $itdt->itdt_id }}'
-                                                                @if(isset($itemDetail->itdt_id))
-                                                                    @if ($itemDetail->itdt_id == $itdt->itdt_id)
-                                                                        selected
-                                                                    @endif
-                                                                @endif
-                                                            >
-                                                                {{ $itdt->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </td>
-                                                <td class='text-center'><input type='text' class='form-control amountPercentInput harmonyAmountInput txtItemQuantity' value='{{ number_format($itemDetail->quantity, 2) }}' onkeypress='return isNumberPercentage(event, $(this))'></td>
-                                                <td class='text-center'><input type='text' class='form-control amountPercentInput' value='{{ number_format($itemDetail->price, 2) }}' readonly></td>
-                                                <td class='text-center'><input type='text' class='form-control amountPercentInput' value='{{ number_format($itemDetail->sub_total, 2) }}' readonly></td>
-                                                <td class='text-center' style='width: 5%;'><img class='deleteItemRow' src='/img/delete.png' style='cursor: pointer; width: 2rem; height: 2rem;' onclick='deleteRowInvoiceItemDetail($(this))'></td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
+                                    <tbody></tbody>
 
                                     <tfoot>
                                         <tr role="row">
@@ -81,12 +56,10 @@
                                             </th>
 
                                             <th>
-                                                {{ Form::text('sub_total', $invoiceObj->sub_total, array('id' => 'invoice_sub_total', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
+                                                {{ Form::text('sub_total', null, array('id' => 'invoice_sub_total', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
                                             </th>
 
-                                            <th>
-                                                <input type="hidden" id="txtUpdateInvoice" value="true" readonly>
-                                            </th>
+                                            <th></th>
                                         </tr>
 
                                         <tr role="row">
@@ -95,7 +68,7 @@
                                             </th>
 
                                             <th>
-                                                {{ Form::text('paid_amt', $invoiceObj->paid_amt, array('id' => 'paid_amt', 'class' => 'w-100 form-control text-filter amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
+                                                {{ Form::text('paid_amt', null, array('id' => 'paid_amt', 'class' => 'w-100 form-control text-filter amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
                                             </th>
 
                                             <th></th>
@@ -107,7 +80,7 @@
                                             </th>
 
                                             <th>
-                                                {{ Form::text('return_amt', $invoiceObj->return_amt, array('id' => 'return_amt', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
+                                                {{ Form::text('return_amt', null, array('id' => 'return_amt', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
                                             </th>
 
                                             <th></th>
@@ -130,3 +103,4 @@
         </div>
     </div>
 @endsection
+

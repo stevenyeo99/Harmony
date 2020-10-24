@@ -16,4 +16,6 @@
 
 {!! Html::script('js/purchase.js') !!}
 
+{!! Html::script('js/invoice.js') !!}
+
 @stack('scripts')

@@ -116,7 +116,18 @@ Route::prefix('/manage_purchase')->group(function() {
 
 // manage invoice module
 Route::prefix('/manage_invoice')->group(function() {
+    Route::get('/', 'HsInvoiceController@index')->name('manage.invoice');
+    Route::get('/list', 'HsInvoiceController@displayData')->name('manage.invoice.list');
+    Route::get('/create', 'HsInvoiceController@create')->name('manage.invoice.create');
+    Route::post('/create', 'HsInvoiceController@store')->name('manage.invoice.store');
+    Route::get('/view/{id}', 'HsInvoiceController@view')->name('manage.invoice.view');
+    Route::get('/edit/{id}', 'HsInvoiceController@edit')->name('manage.invoice.edit');
+    Route::post('/update/{id}', 'HsInvoiceController@update')->name('manage.invoice.update');
+    Route::post('/approve/{id}', 'HsInvoiceController@approve')->name('manage.invoice.approve');
+    Route::post('/delete/{id}', 'HsInvoiceController@delete')->name('manage.invoice.delete');
 
+    // ajax request component form
+    Route::get('/ajax/invoice_item', 'HsInvoiceController@getInvoiceItems')->name('manage.invoice.getInvoiceItems');
 });
 
 // home routing
