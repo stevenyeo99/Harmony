@@ -109,3 +109,23 @@ function scrollTo(element)
         scrollTop: element.offset().top
     }, 1000);
 }
+
+function fnOpenPopUpWindow(windowName, URL) {
+    var availHeight = screen.availHeight;
+    var availWidth = screen.availWidth;
+    var x = 0, y = 0;
+    if (document.all) {
+        x = window.screentop;
+        y = window.screenLeft;
+    } else if (document.layers) {
+        x = window.screenX;
+        y = window.screenY;
+    }
+    var windowArguments = 'resizable=1,toolbar=0,location=0,directories=0,addressbar=0,scrollbars=1,status=1,menubar=0,top=0,left=0, ';
+    windowArguments += 'screenX=' + x + ',screenY=' + y + ',width=' + availWidth + ',height=' + availHeight;
+
+    var newWindow = window.open(URL, windowName, windowArguments);
+    newWindow.moveTo(0, 0);
+
+    return newWindow;
+}

@@ -29,7 +29,7 @@ class HsItemCategory extends BaseModel
     }
 
     public function hsItemDetail() {
-        return $this->hasMany('App\Models\HsItemDetail');
+        return $this->hasMany('App\Models\HsItemDetail', 'itcg_id');
     }
 
     public function errors() {

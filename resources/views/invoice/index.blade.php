@@ -10,6 +10,18 @@
                     <a href="{!! route('manage.invoice.create') !!}" class="btn btn-success float-right">
                         <i class="fa fa-plus"></i> Tambah
                     </a>
+
+                    @if (Session::has('triggerPrint'))
+                        <input type="hidden" id="triggerPrint" name="triggerPrint" value="{{ Session::get('triggerPrint') }}" readonly>
+                    @endif
+                    
+                    @if (Session::has('invcPreviewId'))
+                        <input type="hidden" id="invcPreviewId" name="invcPreviewId" value="{{ Session::get('invcPreviewId') }}" readonly>
+                    @endif
+
+                    @if (Session::has('new'))
+                        <input type="hidden" id="txtNew" name="txtNew" value="{{ Session::get('new') }}" readonly>
+                    @endif
                 </div>
 
                 <div class="card-body">

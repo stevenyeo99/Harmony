@@ -22,7 +22,7 @@
                             {{ Form::label('invoice_datetime', 'Tanggal Transaksi :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0')) }}
 
                             <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                                {{ Form::text('invoice_datetime', \Carbon\Carbon::parse($invoiceObj->invoice_datetime)->format('Y-m-d'), array('id' => 'invoice_datetime', 'class' => 'form-control w-100', 'readonly' => true)) }}
+                                {{ Form::text('invoice_datetime', \Carbon\Carbon::parse($invoiceObj->invoice_datetime)->format('Y-m-d'), array('id' => 'txtInvoiceDateTime', 'class' => 'form-control w-100', 'readonly' => true)) }}
                             </div>
                         </div>
 
@@ -85,7 +85,7 @@
                                             </th>
 
                                             <th>
-                                                <input type="hidden" id="txtUpdateInvoice" value="true" readonly>
+                                                
                                             </th>
                                         </tr>
 
@@ -110,7 +110,9 @@
                                                 {{ Form::text('return_amt', $invoiceObj->return_amt, array('id' => 'return_amt', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
                                             </th>
 
-                                            <th></th>
+                                            <th>
+                                                <input type="hidden" id="txtIsProcess" name="txtIsProcess" value="false" readonly>
+                                            </th>   
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -119,6 +121,7 @@
 
                         <div class="form-group form-inline text-right">
                             <div class="col-sm-12">
+                                <!-- <a href="{{ route('manage.invoice.receiptPage', $invoiceObj->invc_id) }}" class='btn btn-danger'>Demo Receipt</a> -->
                                 {{ Form::button('Kembali', array('class' => 'btn btn-secondary', 'id' => 'btnBack', 'data-toggle' => 'modal', 'data-target' => '#backModal')) }}
                                 {{ Form::button('Simpan', array('class' => 'btn btn-primary', 'id' => 'btnInvoiceSave', 'data-target' => '#confirmModal')) }}
                                 {{ Form::button('Proses', array('class' => 'btn btn-primary glowing-button', 'id' => 'btnInvoiceProcess', 'data-target' => '#confirmModal')) }}

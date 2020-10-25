@@ -83,7 +83,20 @@
                                                 {{ Form::text('return_amt', null, array('id' => 'return_amt', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
                                             </th>
 
-                                            <th></th>
+                                            <th>
+                                                <input type="hidden" id="txtIsProcess" name="txtIsProcess" value="false" readonly>
+                                                @if (Session::has('triggerPrint'))
+                                                    <input type="hidden" id="triggerPrint" name="triggerPrint" value="{{ Session::get('triggerPrint') }}" readonly>
+                                                @endif
+                                                
+                                                @if (Session::has('invcPreviewId'))
+                                                    <input type="hidden" id="invcPreviewId" name="invcPreviewId" value="{{ Session::get('invcPreviewId') }}" readonly>
+                                                @endif
+
+                                                @if (Session::has('new'))
+                                                    <input type="hidden" id="txtNew" name="txtNew" value="{{ Session::get('new') }}" readonly>
+                                                @endif
+                                            </th>
                                         </tr>
                                     </tfoot>
                                 </table>

@@ -304,7 +304,15 @@ class HsPurchaseController extends MasterController {
                     'description' => 'Transaksi pembelian item pada PO: ' . $hsPurchase->po_no,
                 );
             }
+
             HsItemStockLog::insert($hsItemStockLogs);
+
+            // 4. update item quantity
+            foreach ($hsItemStockLogs as $item) {
+                $hsItemDetail = HsItemDetail::find($item['itdt_id']);
+                $hsItemDetail->quantity = $item['new_quantity'];
+                $hsItemDetail->save();
+            }
 
             DB::commit();
 

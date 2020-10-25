@@ -15,6 +15,7 @@ use App\Enums\StatusType;
 use App\Enums\ActionType;
 use App\Enums\ChangeType;
 use Carbon\Carbon;
+use PDF;
 
 class HsInvoiceController extends MasterController {
  
@@ -40,7 +41,7 @@ class HsInvoiceController extends MasterController {
                 $btn = "<a href='" . $this->getRoute('view', $invoice->invc_id) ."' class='btn btn-info btn-sm'>Lihat</a>";
                 if ($invoice->status == StatusType::ACTIVE && !isset($invoice->invoice_no)) {
                     $btn .= " <a href='" . $this->getRoute('edit', $invoice->invc_id) . "' class='btn btn-warning btn-sm'>Ubah</a>";
-                    $btn .= " <button class='btn text-white btn-sm glowing-button' onclick='trigApproveModalBtn(\"" . $this->getRoute("approve", $invoice->invc_id) . "\");'>Terima</button>";
+                    // $btn .= " <button class='btn text-white btn-sm glowing-button' onclick='trigApproveModalBtn(\"" . $this->getRoute("approve", $invoice->invc_id) . "\");'>Terima</button>";
                     $btn .= " <button class='btn btn-danger btn-sm' onclick='trigDeleteModalBtn(\"" . $this->getRoute("delete", $invoice->invc_id) . "\");'>Hapus</button>";
                 }
                 
@@ -116,6 +117,8 @@ class HsInvoiceController extends MasterController {
     public function store(Request $request) {
         $data = Input::all();
 
+        $isProcessing = $data['txtIsProcess'];
+
         try {
             DB::beginTransaction();
 
@@ -150,13 +153,72 @@ class HsInvoiceController extends MasterController {
             $hsInvoiceLog->log_date_time = now();
             $hsInvoiceLog->save();
 
+            $triggerPrint = 'NO';
+            $invcPreviewId = null;
+            $new = null;
+            
+            // save transaction process
+            if ($isProcessing == 'true') {
+                $this->processingTransaction($hsInvoice);
+                $triggerPrint = 'YES';
+                $invcPreviewId = $hsInvoice->invc_id;
+                $new = "YES";
+            }
+
             DB::commit();
 
             $this->setFlashMessage('success', $hsInvoice->messages('success', 'create'));
-            return redirect($this->getRoute('create'));
+            
+            return redirect($this->getRoute('create'))
+                ->with(['triggerPrint' => $triggerPrint, 'invcPreviewId' => $invcPreviewId, 'new' => $new]);
         } catch (\Exception $e) {
             DB::rollback();
             return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('create'), $e);
+        }
+    }
+
+    /**
+     * processing invoice
+     */
+    public function processingTransaction(HsInvoice $hsInvoice) {
+        
+        if (!isset($hsInvoice->invoice_no)) {
+            $hsInvoice->invoice_no = $this->generateInvNo();
+            $hsInvoice->save();
+        }
+
+        // transaction for hs_item_stock_log
+        $hsItemStockLogs = [];
+        $hsInvoiceDetails = HsInvoiceDetail::where('invc_id', $hsInvoice->invc_id)->get();
+        foreach ($hsInvoiceDetails as $hsInvoiceDetail) {
+            $originalQuantity = $hsInvoiceDetail->hsItemDetail->quantity;
+
+            if (!isset($originalQuantity)) {
+                $originalQuantity = '0.00';
+            }
+
+            $hsItemStockLogs[] = array (
+                'itdt_id' => $hsInvoiceDetail->itdt_id,
+                'original_quantity' => $originalQuantity,
+                'add_quantity' => '0.00',
+                'min_quantity' => $hsInvoiceDetail->quantity,
+                'prdt_id' => null,
+                'ivdt_id' => $hsInvoiceDetail->ivdt_id,
+                'change_type' => ChangeType::SALES,
+                'change_time' => now(),
+                'user_id' => auth()->user()->user_id,
+                'new_quantity' => number_format(floatval($originalQuantity) - floatval($hsInvoiceDetail->quantity), 2),
+                'description' => 'Transaksi penjualan item pada IV: ' . $hsInvoice->invoice_no,
+            );
+        }
+
+        HsItemStockLog::insert($hsItemStockLogs);
+
+        // update item quantity
+        foreach ($hsItemStockLogs as $item) {
+            $hsItemDetail = HsItemDetail::find($item['itdt_id']);
+            $hsItemDetail->quantity = $item['new_quantity'];
+            $hsItemDetail->save();
         }
     }
 
@@ -172,7 +234,9 @@ class HsInvoiceController extends MasterController {
 
         $invoiceObj = HsInvoice::find($id);
 
-        return view('invoice.view', compact('title', 'invoiceActive', 'invoiceNo', 'invoiceObj'));
+        $triggerPrint = null;
+
+        return view('invoice.view', compact('title', 'invoiceActive', 'invoiceNo', 'invoiceObj', 'triggerPrint'));
     }
 
     /**
@@ -198,6 +262,8 @@ class HsInvoiceController extends MasterController {
      */
     public function update(Request $request, $id) {
         $data = Input::all();
+
+        $isProcessing = $data['txtIsProcess'];
 
         try {
             DB::beginTransaction();
@@ -234,21 +300,27 @@ class HsInvoiceController extends MasterController {
             $hsInvoiceLog->log_date_time = now();
             $hsInvoiceLog->save();
 
-            DB::commit();
+            $triggerPrint = 'NO';
+            $invcPreviewId = null;
+            $new = null;
+            
+            // save transaction process
+            if ($isProcessing == 'true') {
+                $this->processingTransaction($hsInvoice);
+                $triggerPrint = 'YES';
+                $invcPreviewId = $hsInvoice->invc_id;
+                $new = "NO";
+            }
 
+            DB::commit();
+            
             $this->setFlashMessage('success', $hsInvoice->messages('success', 'update'));
-            return redirect($this->getRoute('index'));
+            return redirect($this->getRoute('index'))
+                ->with(['triggerPrint' => $triggerPrint, 'invcPreviewId' => $invcPreviewId, 'new' => $new]);
         } catch (\Exception $e) {
             DB::rollback();
             return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('edit', $id), $e);
         }
-    }
-
-    /**
-     * approve data
-     */
-    public function approve(Request $request, $id) {
-
     }
 
     /**
@@ -279,6 +351,28 @@ class HsInvoiceController extends MasterController {
         }
     }
 
+    /**
+     * receipt page for developer purpose
+     */
+    public function receiptPage($id) {
+        $invoiceObj = HsInvoice::find($id);
+
+        return view('invoice.receipt', compact('invoiceObj'));
+    }
+
+    /**
+     * generate receipt
+     */
+    public function generateReceipt($id) {
+        $invoiceObj = HsInvoice::find($id);
+
+        set_time_limit(300);
+        
+        $pdf = PDF::loadview('invoice.receipt', ['invoiceObj' => $invoiceObj])
+        ->setPaper(array(0,0,204,350), 'portrait');
+        return $pdf->stream('file.pdf');
+    }
+
     public function getRoute($key, $id = null) {
         switch ($key) {
             case 'index':
@@ -289,8 +383,6 @@ class HsInvoiceController extends MasterController {
                 return route('manage.invoice.view', $id);
             case 'edit':
                 return route('manage.invoice.edit', $id);
-            case 'approve':
-                return route('manage.invoice.approve', $id);
             case 'delete':
                 return route('manage.invoice.delete', $id);
             default:

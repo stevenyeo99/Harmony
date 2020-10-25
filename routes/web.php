@@ -128,6 +128,10 @@ Route::prefix('/manage_invoice')->group(function() {
 
     // ajax request component form
     Route::get('/ajax/invoice_item', 'HsInvoiceController@getInvoiceItems')->name('manage.invoice.getInvoiceItems');
+
+    // print transaction struct
+    Route::get('/receipt/invoice/{id}', 'HsInvoiceController@receiptPage')->name('manage.invoice.receiptPage');
+    Route::get('/generateReceipt/invoice/{id}', 'HsInvoiceController@generateReceipt')->name('manage.invoice.generateReceipt');
 });
 
 // home routing

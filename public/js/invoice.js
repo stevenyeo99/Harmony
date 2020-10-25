@@ -6,6 +6,9 @@ $(document).ready(function() {
     calculationReturnAmount();
     submitInvoiceForm();
     resetInvoiceItemBodyDetails();
+    initializeDatePickerEditTransaction();
+    automateTriggerPrint();
+    proceedTransaction();
 });
 
 // used for invoice itemdetail list
@@ -22,6 +25,22 @@ function initializeItemDetailData() {
             console.log(data);
         }
     })
+}
+
+function initializeDatePickerEditTransaction() {
+    var transactionDate = $('#txtInvoiceDateTime').val();
+    if (typeof transactionDate !== 'undefined') {
+        if (transactionDate !== '') {
+            var arrayDate = transactionDate.split("-");
+            var day = arrayDate[2];
+            var month = arrayDate[1];
+            var year = arrayDate[0];
+            $('#txtInvoiceDateTime').datepicker({
+                dateFormat: 'yy-mm-dd',
+                minDate: new Date(year, month - 1, day),
+            });
+        }
+    }
 }
 
 function resetInvoiceItemBodyDetails() {
@@ -189,7 +208,6 @@ function validateInvoiceForm() {
     // 2. validate must exist at least 1 item
     // 3. each item detail
     // 4. validate cannot duplicated item detail
-    // 5. validate user need to paid
     // 6. validate return amount cannot be -
 
     var invoice_datetime = $('#invoice_datetime');
@@ -255,6 +273,19 @@ function validateInvoiceForm() {
             }
         }
 
+        var e_return_amt = $('#return_amt');
+        var e_pay_amt = $('#paid_amt');
+        var e_sub_total = $('#invoice_sub_total');
+        if (e_pay_amt.val() !== '' && e_sub_total.val() !== '') {
+            if (parseFloat(removeNumberFormat(e_pay_amt.val())) < parseFloat(removeNumberFormat(e_sub_total.val()))) {
+                alert('Pembayaran tidak boleh kurang dari total harga barang!');
+                scrollTo(e_pay_amt);
+                e_pay_amt.focus();
+                valid = false;
+                return false;
+            } 
+        }
+
         itdtValidArr.push(itdt_id.val());
         index++;
     });
@@ -267,8 +298,36 @@ function validateInvoiceForm() {
  */
 function submitInvoiceForm() {
     $('#btnInvoiceSave').click(function() {
+        $('#txtIsProcess').val("false");
         if (validateInvoiceForm()) {
             $('#confirmModal').modal('show');
         }
     });
+}
+
+function proceedTransaction() {
+    $('#btnInvoiceProcess').click(function() {
+        $('#txtIsProcess').val("true");
+        if (validateInvoiceForm()) {
+            $('#confirmModal').modal('show');
+        }
+    });
+}
+
+/**
+ * trigger print when finisih processing transaction
+ */
+function automateTriggerPrint() {
+    var isAutomate = $('#triggerPrint');
+    var txtNew = $('#txtNew');
+    if (typeof isAutomate.val() !== 'undefined') {
+        if (isAutomate.val() === 'YES') {
+            var url = './generateReceipt/invoice/' + $('#invcPreviewId').val();
+            if (txtNew.val() === 'NO') {
+                url = './manage_invoice/generateReceipt/invoice/' + $('#invcPreviewId').val();
+            } 
+            
+            fnOpenPopUpWindow('Transaction Receipt', url);
+        }
+    }
 }

@@ -21,6 +21,14 @@ class HsItemDetail extends BaseModel
 
     public $timestamps = false;
 
+    public function hsItemCategory() {
+        return $this->belongsTo('App\Models\HsItemCategory', 'itcg_id');
+    }
+
+    public function hsItemUom() {
+        return $this->belongsTo('App\Models\HsItemUom', 'ituo_id');
+    }
+
     public function hsPurchaseDetail() {
         return $this->hasMany('App\Models\HsItemDetail', 'itdt_id');
     }

@@ -77,6 +77,7 @@
                                         </th>
 
                                         <th>
+                                            <input type="hidden" id="triggerPrint" value="{{ $triggerPrint }}" readonly>
                                             {{ Form::text('return_amt', $invoiceObj->return_amt, array('id' => 'return_amt', 'class' => 'w-100 form-control text-filter amountPercentInput', 'readonly' => true)) }}
                                         </th>
                                     </tr>
@@ -84,6 +85,14 @@
                             </table>
                         </div>
                     </div>
+
+                    @if (isset($invoiceObj->invoice_no))
+                        <div class="form-group form-inline text-right">
+                            <div class="col-sm-12">
+                                <a href="{{ route('manage.invoice.generateReceipt', $invoiceObj->invc_id) }}" class='btn btn-danger'>Demo Receipt</a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

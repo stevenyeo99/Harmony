@@ -35,7 +35,7 @@ class HsInvoice extends BaseModel
                     case 'delete';
                         return 'Telah menghapus transaksi penjualan dengan sukses!';
                     case 'approve':
-                        return 'Penjualan telah tersimpan dalam transaksi!';
+                        return 'Transaksi penjualan telah diproses!';
                 }
             default:
                 break;
