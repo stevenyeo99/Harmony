@@ -115,6 +115,21 @@ class MasterController extends Controller {
             case 'edit_item_stock':
                 $title = "Atur Kuantiti Stock Item " . $key2;
                 break;
+            case 'report_item':
+                $title = "Export laporan data item";
+                break;
+            case 'report_supplier':
+                $title = "Export laporan data supplier";
+                break;
+            case 'report_transaction_item':
+                $title = "Export laporan transaksi item";
+                break;
+            case 'report_transaction_purchase':
+                $title = "Export laporan transaksi pembelian";
+                break;
+            case 'report_transaction_invoice':
+                $title = "Export laporan transaksi penjualan";
+                break;
             default:
                 return '';
         }

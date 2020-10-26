@@ -34,44 +34,48 @@
         </a>
     </li>
 
-    <li class="nav-item {{ isset($purchaseActive) ? $purchaseActive : '' }}">
-        <a class="nav-link" href="{{ route('manage.purchase') }}">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Pembelian</span>
-        </a>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Modul
-    </div>
-
-    <li class="nav-item {{ isset($itemActive) ? $itemActive : ''}}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseItem" aria-expanded="true" aria-controls="collapseItem">
-            <i class="fas fa-box"></i>
-            <span>Item</span>
-        </a>
-        
-        <div id="collapseItem" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item {{ isset($itemDetailActive) ? $itemDetailActive : ''}}" href="{{ route('manage.item.detail') }}">Item</a>
-                <a class="collapse-item {{ isset($itemCategoryActive) ? $itemCategoryActive : ''}}" href="{{ route('manage.item.category') }}">Kategori</a>
-                <a class="collapse-item {{ isset($itemUnitActive) ? $itemUnitActive : ''}}" href="{{ route('manage.item.unit') }}">Unit</a>
-            </div>
-        </div>
-    </li>
-
-    <li class="nav-item {{ isset($supplierActive) ? $supplierActive : '' }}">
-        <a class="nav-link" href="{{ route('manage.supplier') }}">
-            <i class="fas fa-address-book"></i>
-            <span>Supplier</span>
-        </a>
-    </li>
+    @if(Gate::allows('is-admin'))
+        <li class="nav-item {{ isset($purchaseActive) ? $purchaseActive : '' }}">
+            <a class="nav-link" href="{{ route('manage.purchase') }}">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Pembelian</span>
+            </a>
+        </li>
+    @endif
 
     @if(Gate::allows('is-admin'))
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Modul
+        </div>
+
+        <li class="nav-item {{ isset($itemActive) ? $itemActive : ''}}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseItem" aria-expanded="true" aria-controls="collapseItem">
+                <i class="fas fa-box"></i>
+                <span>Item</span>
+            </a>
+            
+            <div id="collapseItem" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ isset($itemDetailActive) ? $itemDetailActive : ''}}" href="{{ route('manage.item.detail') }}">Item</a>
+                    <a class="collapse-item {{ isset($itemCategoryActive) ? $itemCategoryActive : ''}}" href="{{ route('manage.item.category') }}">Kategori</a>
+                    <a class="collapse-item {{ isset($itemUnitActive) ? $itemUnitActive : ''}}" href="{{ route('manage.item.unit') }}">Unit</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item {{ isset($supplierActive) ? $supplierActive : '' }}">
+            <a class="nav-link" href="{{ route('manage.supplier') }}">
+                <i class="fas fa-address-book"></i>
+                <span>Supplier</span>
+            </a>
+        </li>
+    @endif
+
+    @if(Gate::allows('is-boss'))
         <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
             <a class="nav-link" href="{{ route('manage.user') }}">
                 <i class="fas fa-users"></i>
@@ -80,37 +84,46 @@
         </li>
     @endif
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Laporan
-    </div>
+    
 
     @if(Gate::allows('is-admin'))
-        <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
-            <a class="nav-link" href="{{ route('manage.user') }}">
-                <i class="fas fa-users"></i>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Laporan
+        </div>
+
+        <li class="nav-item {{ isset($itemReportActive) ? $itemReportActive : ''}}">
+            <a class="nav-link" href="{{ route('manage.report.itemReportIndex') }}">
+                <i class="fas fa-clipboard"></i>
                 <span>Item</span>
             </a>
         </li>
 
-        <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
+        <li class="nav-item {{ isset($supplierReportActive) ? $supplierReportActive : ''}}">
             <a class="nav-link" href="{{ route('manage.user') }}">
-                <i class="fas fa-users"></i>
-                <span>Pembelian</span>
+                <i class="fas fa-user-tag"></i>
+                <span>Supplier</span>
             </a>
         </li>
 
-        <li class="nav-item {{ isset($userActive) ? $userActive : ''}}">
-            <a class="nav-link" href="{{ route('manage.user') }}">
-                <i class="fas fa-users"></i>
-                <span>Penjualan</span>
+        <li class="nav-item {{ isset($transactionReportActive) ? $itemActransactionReportActivetive : ''}}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseItem2" aria-expanded="true" aria-controls="collapseItem2">
+                <i class="fas fa-chart-line"></i>
+                <span>Transaksi</span>
             </a>
+        
+            <div id="collapseItem2" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ isset($transactionItemReportActive) ? $transactionItemReportActive : ''}}" href="{{ route('manage.item.detail') }}">Item</a>
+                    <a class="collapse-item {{ isset($transactionPOReportActive) ? $transactionPOReportActive : ''}}" href="{{ route('manage.item.category') }}">Pembelian</a>
+                    <a class="collapse-item {{ isset($transactionInvoiceReportActive) ? $transactionInvoiceReportActive : ''}}" href="{{ route('manage.item.unit') }}">Penjualan</a>
+                </div>
+            </div>
         </li>
     @endif
-
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

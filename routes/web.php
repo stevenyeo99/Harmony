@@ -134,6 +134,13 @@ Route::prefix('/manage_invoice')->group(function() {
     Route::get('/generateReceipt/invoice/{id}', 'HsInvoiceController@generateReceipt')->name('manage.invoice.generateReceipt');
 });
 
+// manage harmony report
+Route::prefix('/manage_report')->group(function() {
+    // data item
+    Route::get('/item', 'HsReportController@itemReportIndex')->name('manage.report.itemReportIndex');
+    Route::post('/item', 'HsReportController@exportItemReport')->name('manage.report.exportItemReport');
+});
+
 // home routing
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/gettingJsonSellBuyView', 'HomeController@gettingJsonSellBuyView');
