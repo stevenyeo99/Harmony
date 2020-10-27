@@ -56,6 +56,8 @@ Route::prefix('/manage_supplier')->group(function() {
     Route::get('/edit/{id}', 'HsSupplierController@edit')->name('manage.supplier.edit');
     Route::post('/update/{id}', 'HsSupplierController@update')->name('manage.supplier.update');
     Route::post('/delete/{id}', 'HsSupplierController@delete')->name('manage.supplier.delete');
+    // export excel
+    Route::get('/exportSupplierData', 'HsSupplierController@exportSupplierReport')->name('manage.supplier.exportSupplierReport');
 });
 
 // manage item detail module
@@ -72,6 +74,8 @@ Route::prefix('/manage_item_detail')->group(function() {
     Route::get('/listStock/{id}', 'HsItemDetailController@listStock')->name('manage.item.detail.listStock');
     Route::get('/editStock/{id}', 'HsItemDetailController@editStock')->name('manage.item.detail.editStock');
     Route::post('/updateStock/{id}', 'HsItemDetailController@updateStock')->name('manage.item.detail.updateStock');
+    // export excel
+    Route::get('/exportItemData', 'HsItemDetailController@exportItemReport')->name('manage.item.detail.exportItemReport');
 });
 
 // manage item category module
@@ -138,7 +142,6 @@ Route::prefix('/manage_invoice')->group(function() {
 Route::prefix('/manage_report')->group(function() {
     // data item
     Route::get('/item', 'HsReportController@itemReportIndex')->name('manage.report.itemReportIndex');
-    Route::post('/item', 'HsReportController@exportItemReport')->name('manage.report.exportItemReport');
 });
 
 // home routing

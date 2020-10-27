@@ -17,6 +17,16 @@
                     <div class="table-responsive">
                         <table class="table table-bordered hover compact dtTable" id="dtManageItemDetail">
                             <thead>
+                                @if ($count > 0)
+                                    <tr>
+                                        <th class="text-center bg-primary text-white" colspan="5">
+                                            <a href="{!! route('manage.item.detail.exportItemReport') !!}" class="btn btn-light float-right">
+                                                <i class="fa fa-file-alt"></i> Cetak
+                                            </a>
+                                        </th>
+                                    </tr>
+                                @endif
+
                                 <tr role="row">
                                     <th class="text-center bg-primary text-white">Kode</th>
                                     <th class="text-center bg-primary text-white">Nama</th>

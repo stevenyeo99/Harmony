@@ -32,7 +32,5 @@ class HsReportController extends MasterController {
         return view('report.item.index', compact('itemReportActive', 'title'));
     }
 
-    public function exportItemReport() {
-        return Excel::download(new ItemExports(), 'Item.xlsx');
-    }
+    
 }

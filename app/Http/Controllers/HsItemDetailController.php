@@ -15,6 +15,8 @@ use Yajra\Datatables\Datatables;
 use App\Enums\StatusType;
 use App\Enums\ActionType;
 use App\Enums\ChangeType;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class HsItemDetailController extends MasterController {
 
@@ -38,7 +40,9 @@ class HsItemDetailController extends MasterController {
 
         $listOfItemCategory = $itemCategoryModel->getItemCategory();
 
-        return view('item.detail.index', compact('title', 'itemActive', 'itemDetailActive', 'ddlStatus', 'listOfItemCategory'));
+        $count = count(HsItemDetail::where('status', StatusType::ACTIVE)->get());
+
+        return view('item.detail.index', compact('title', 'itemActive', 'itemDetailActive', 'ddlStatus', 'listOfItemCategory', 'count'));
     }
 
     /**
@@ -447,6 +451,76 @@ class HsItemDetailController extends MasterController {
             $errors = $hsItemStockLog->errors();
             return $this->redirectToRouteWithErrorsAndInputs($this->getRoute('editStock', $id), $errors);
         }       
+    }
+
+    public function exportItemReport() {
+        setlocale(LC_TIME, 'id-ID');
+
+        $result = HsItemDetail::where('status', StatusType::ACTIVE)
+            ->get();
+
+        $result_array = array();
+
+        $count = count($result);
+
+        if ($count > 0) {
+            foreach ($result as $key => $res) {               
+                $result_array[$key]['Kode'] = $res->code;
+                $result_array[$key]['Nama'] = $res->name;
+                $result_array[$key]['Deskripsi'] = $res->description;
+                $result_array[$key]['Supplier'] = $res->hsSupplier->name;
+                $result_array[$key]['Kategori'] = $res->hsItemCategory->name;
+                $result_array[$key]['Kuantiti'] = $res->quantity;
+                $result_array[$key]['Tipe Unit'] = $res->hsItemUom->name;
+                $result_array[$key]['Harga Beli'] = 'RP. '. $res->price;
+                $result_array[$key]['Harga Jual'] = 'RP. '. $res->net_price;
+            }
+        
+            Excel::create('Data Item Harmony', function($excel) use ($result_array, $count) {
+
+                $excel->sheet('Data Item', function($sheet) use ($result_array, $count) {
+                    
+                    // Fill the XLS with data
+                    $sheet->fromArray($result_array, null, 'A1', true);
+
+                    // set Row height
+                    $sheet->setHeight(1, 25);
+
+                    // Manipulate Row
+                    $sheet->row(1, function ($row) {
+                        $row->setFontWeight('bold');
+                        $row->setAlignment('center');
+                        $row->setValignment('center');
+                    });
+
+                    // algorithm to set color for item quantity minus
+                    $index = 2;
+                    foreach ($result_array as $data) {
+                        if (substr($data["Kuantiti"], 0, 1) == '-') {
+                            $sheet->cell('F' . $index, function ($cell) {
+                                $cell->setFontColor('#FF0000');
+                            });
+                        }
+                        $index++;
+                    }
+
+                    $sheet->cell('F2:F'. ($count + 1), function($cell) {
+                        $cell->setAlignment('right');
+                    });
+
+                    $sheet->cell('H2:H' . ($count + 1), function($cell) {
+                        $cell->setAlignment('right');
+                    });
+
+                    $sheet->cell('I2:I' . ($count + 1), function($cell) {
+                        $cell->setAlignment('right');
+                    });
+
+                    // Freeze first row
+                    $sheet->freezeFirstRow();
+                });
+            })->export('xlsx');
+        }
     }
 
     public function getRoute($key, $id = null) {

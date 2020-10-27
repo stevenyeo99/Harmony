@@ -29,6 +29,10 @@ class HsItemDetail extends BaseModel
         return $this->belongsTo('App\Models\HsItemUom', 'ituo_id');
     }
 
+    public function hsSupplier() {
+        return $this->belongsTo('App\Models\HsSupplier', 'splr_id');
+    }
+
     public function hsPurchaseDetail() {
         return $this->hasMany('App\Models\HsItemDetail', 'itdt_id');
     }

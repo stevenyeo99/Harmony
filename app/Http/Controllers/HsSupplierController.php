@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Input;
 use Yajra\Datatables\Datatables;
 use App\Enums\StatusType;
 use App\Enums\ActionType;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class HsSupplierController extends MasterController
 {
@@ -27,7 +29,9 @@ class HsSupplierController extends MasterController
 
         $ddlStatus = StatusType::getStrings();
 
-        return view('supplier.index', compact('title', 'supplierActive', 'ddlStatus'));
+        $count = count(HsSupplier::where('status', StatusType::ACTIVE)->get());
+
+        return view('supplier.index', compact('title', 'supplierActive', 'ddlStatus', 'count'));
     }
 
     /**
@@ -245,6 +249,66 @@ class HsSupplierController extends MasterController
         } catch (\Exception $e) {
             DB::rollback();
             return $this->parseErrorAndRedirectToRouteWithErrors($this->getRoute('index'), $e);
+        }
+    }
+
+    public function exportSupplierReport() {
+        setLocale(LC_TIME, 'id-ID');
+
+        $result = HsSupplier::where('status', StatusType::ACTIVE)
+            ->get();
+
+        $result_array = array();
+
+        $count = count($result);
+
+        if ($count > 0) {
+            foreach ($result as $key => $res) {
+                $result_array[$key]['Kode'] = $res->code;
+                $result_array[$key]['Nama'] = $res->name;
+                $result_array[$key]['email'] = $res->email;
+                $result_array[$key]['Alamat'] = $res->address_line_1;
+                if (isset($res->address_line_2)) {
+                    $result_array[$key]['Alamat'] .= ' ' . $res->address_line_2;
+                }
+                if (isset($res->address_line_3)) {
+                    $result_array[$key]['Alamat'] .= ' ' . $res->address_line_3;
+                }
+                if (isset($res->address_line_4)) {
+                    $result_array[$key]['Alamat'] .= ' ' . $res->address_line_4;
+                }
+                $result_array[$key]['Nomor Telpon'] = $res->telp_no;
+                $result_array[$key]['Kontak Nama 1'] = $res->contact_name_1;
+                $result_array[$key]['Kontak No 1'] = $res->contact_person_1;
+                $result_array[$key]['Kontak Nama 2'] = $res->contact_name_2;
+                $result_array[$key]['Kontak No 2'] = $res->contact_person_2;
+                $result_array[$key]['Kontak Nama 3'] = $res->contact_name_3;
+                $result_array[$key]['Kontak No 3'] = $res->contact_person_3;
+                $result_array[$key]['Kontak Nama 4'] = $res->contact_name_4;
+                $result_array[$key]['Kontak No 4'] = $res->contact_person_4;
+            }
+
+            Excel::create('Data Supplier Harmony', function($excel) use ($result_array, $count) {
+
+                $excel->sheet('Data Supplier', function($sheet) use ($result_array, $count) {
+                    
+                    // Fill the XLS with data
+                    $sheet->fromArray($result_array, null, 'A1', true);
+
+                    // set Row height
+                    $sheet->setHeight(1, 25);
+
+                    // Manipulate Row
+                    $sheet->row(1, function ($row) {
+                        $row->setFontWeight('bold');
+                        $row->setAlignment('center');
+                        $row->setValignment('center');
+                    });
+
+                    // Freeze first row
+                    $sheet->freezeFirstRow();
+                });
+            })->export('xlsx');
         }
     }
 
