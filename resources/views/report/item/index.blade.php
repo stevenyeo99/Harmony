@@ -6,10 +6,11 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <span>{{ $title }}</span>
+
                 </div>
 
                 <div class="card-body">
-                    {{ Form::open(array('url' => route('manage.report.exportItemReport'), 'method' => 'POST', 'id' => 'frm')) }}
+                    {{ Form::open(array('url' => route('manage.report.generateItemTransactionReport'), 'method' => 'POST', 'id' => 'frm')) }}
 
                     <div class="form-group form-inline">
                         {{ Form::label('date_from', 'Tanggal dari: ', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
@@ -29,8 +30,7 @@
 
                     <div class="form-group form-inline text-right">
                         <div class="col-sm-12">
-                            {{ Form::button('Back', array('class' => 'btn btn-secondary', 'id' => 'btnBack', 'data-toggle' => 'modal', 'data-target' => '#backModal')) }}
-                            {{ Form::button('Save', array('class' => 'btn btn-primary', 'id' => 'btnSave', 'data-toggle' => 'modal', 'data-target' => '#confirmModal')) }}
+                            {{ Form::button('Export', array('class' => 'btn btn-dark', 'id' => 'btnSave', 'data-toggle' => 'modal', 'data-target' => '#confirmModal')) }}
                         </div>
                     </div>
                     {{ Form::close() }}

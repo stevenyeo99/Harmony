@@ -140,8 +140,17 @@ Route::prefix('/manage_invoice')->group(function() {
 
 // manage harmony report
 Route::prefix('/manage_report')->group(function() {
-    // data item
-    Route::get('/item', 'HsReportController@itemReportIndex')->name('manage.report.itemReportIndex');
+    // data transaction item
+    Route::get('/transaction/item', 'HsReportController@itemReportIndex')->name('manage.report.itemReportIndex');
+    Route::post('/transaction/export/item', 'HsReportController@generateItemTransactionReport')->name('manage.report.generateItemTransactionReport');
+
+    // data transaction purchase
+    Route::get('/transaction/purchase', 'HsReportController@purchaseReportIndex')->name('manage.report.purchaseReportIndex');
+    Route::post('/transaction/export/purchase', 'HsReportController@generatePurchaseTransactionReport')->name('manage.report.generatePurchaseTransactionReport');
+
+    // data transaction invoice
+    Route::get('/transaction/invoice', 'HsReportController@invoiceReportIndex')->name('manage.report.invoiceReportIndex');
+    Route::post('/transaction/export/invoice', 'HsReportController@generateInvoiceTransactionReport')->name('manage.report.generateInvoiceTransactionReport');
 });
 
 // home routing

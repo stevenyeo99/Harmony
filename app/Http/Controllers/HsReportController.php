@@ -25,12 +25,50 @@ class HsReportController extends MasterController {
      */
     public function itemReportIndex() {
 
-        $itemReportActive = "active";
+        $transactionItemReportActive = "active";
 
-        $title = $this->getTitle("report_item");
+        $title = $this->getTitle("report_transaction_item");
 
-        return view('report.item.index', compact('itemReportActive', 'title'));
+        return view('report.item.index', compact('transactionItemReportActive', 'title'));
     }
 
-    
+    /**
+     * item transaction report export
+     */
+    public function generateItemTransactionReport(Request $request) {
+
+    }
+
+    /**
+     * purchase report view
+     */
+    public function purchaseReportIndex() {
+        $transactionPurchaseReportActive = "active";
+
+        $title = $this->getTitle("report_transaction_purchase");
+        
+    }
+
+    /**
+     * purchase transaction report export
+     */
+    public function generatePurchaseTransactionReport(Request $request) {
+
+    }
+
+    /**
+     * invoice report view
+     */
+    public function invoiceReportIndex() {
+        $transactionInvoiceReportActive = "active";
+
+        $title = $this->getTitle("report_transaction_purchase");
+    }
+
+    /**
+     * invoice transaction report export
+     */
+    public function generateInvoiceTransactionReport(Request $request) {
+
+    }
 }
