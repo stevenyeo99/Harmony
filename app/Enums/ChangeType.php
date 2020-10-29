@@ -20,4 +20,19 @@ final class ChangeType extends Enum {
 
         return $keyValues;
     }
+
+    public static function getTextChangeType($key = null) {
+        switch ($key) {
+            case ChangeType::PURCHASE:
+                return 'Pembelian';
+            case ChangeType::SALES:
+                return 'Penjualan';
+            case ChangeType::NEWITEM:
+                return 'Item Baru';
+            case ChangeType::EDITITEM:
+                return 'Perubahan Item';
+            default:
+                return '';
+        }
+    }
 }

@@ -18,4 +18,6 @@
 
 {!! Html::script('js/invoice.js') !!}
 
+{!! Html::script('js/transaction_report.js') !!}
+
 @stack('scripts')

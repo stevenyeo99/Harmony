@@ -10,7 +10,7 @@
         @include('layouts.css')
         <!-- end css -->
 
-        <link rel="shortcut icon" href="/img/ico.ico">
+        <link rel="shortcut icon" href="/img/kasir.ico">
         
         <script>
             window.Laravel = <?php echo json_encode([

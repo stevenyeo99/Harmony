@@ -207,7 +207,7 @@ class HsInvoiceController extends MasterController {
                 'change_type' => ChangeType::SALES,
                 'change_time' => now(),
                 'user_id' => auth()->user()->user_id,
-                'new_quantity' => number_format(floatval($originalQuantity) - floatval($hsInvoiceDetail->quantity), 2),
+                'new_quantity' => floatval($originalQuantity) - floatval($hsInvoiceDetail->quantity),
                 'description' => 'Transaksi penjualan item pada IV: ' . $hsInvoice->invoice_no,
             );
         }

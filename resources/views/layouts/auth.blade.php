@@ -9,7 +9,7 @@
         
         @include('layouts.css')
 
-        <link rel="shortcut icon" href="/img/ico.ico">
+        <link rel="shortcut icon" href="/img/kasir.ico">
     </head>
     <body class="bg-gradient-light">
         @yield('content')

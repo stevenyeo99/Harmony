@@ -15,6 +15,10 @@
             }
 
             @page { margin-left: 20px; margin-right: 20px; margin-bottom: 0px; }
+
+            thead {
+                display: table-row-group;
+            }
         </style>
     </head>
     <body>

@@ -15,6 +15,9 @@ class HsItemStockLog extends BaseModel
         'ivdt_id', 'change_type', 'change_time', 'user_id', 'new_quantity', 'description'
     ];
 
+    // variable for helper
+    private $plusOrMinusQuantity;
+
     /**
      * item detail 1-n item stock log
      */

@@ -93,4 +93,10 @@
     '800' => $fontDir . '/nunito-800_f63f2ec8ab2bdc2c981d084d4c7af7e7',
     '900' => $fontDir . '/nunito-900_ac459ba8f7b66a7ccc7d818ff63946d1',
   ),
+  'glyphicons halflings' => array(
+    'normal' => $fontDir . '/glyphicons-halflings-normal_4ced20531a4f462a8c5c535d4debd2eb',
+  ),
+  'fontawesome' => array(
+    'normal' => $fontDir . '/fontawesome-normal_6b8fcb303bfef6f4ea9e882534054307',
+  ),
 ) ?>

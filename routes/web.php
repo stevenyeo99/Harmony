@@ -142,6 +142,7 @@ Route::prefix('/manage_invoice')->group(function() {
 Route::prefix('/manage_report')->group(function() {
     // data transaction item
     Route::get('/transaction/item', 'HsReportController@itemReportIndex')->name('manage.report.itemReportIndex');
+    // Route::get('/transaction/item/view', 'HsReport')
     Route::post('/transaction/export/item', 'HsReportController@generateItemTransactionReport')->name('manage.report.generateItemTransactionReport');
 
     // data transaction purchase

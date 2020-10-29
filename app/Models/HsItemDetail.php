@@ -21,6 +21,8 @@ class HsItemDetail extends BaseModel
 
     public $timestamps = false;
 
+    private $listOfItemStockLogs = [];
+
     public function hsItemCategory() {
         return $this->belongsTo('App\Models\HsItemCategory', 'itcg_id');
     }

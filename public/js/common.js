@@ -3,7 +3,15 @@ $(document).ready(function () {
     trigProcessingDelete();
     trigProcessingApprove();
     bindAmountOnChange();
+    initializeCommonChosenDropdown();
 });
+
+function initializeCommonChosenDropdown() {
+    // each row item
+    var element = 'select.ddlChosen';
+    $(element).chosen();
+    $(element).siblings().css("width", "100%");
+}
 
 function save() {
     $('#btnSaveConfirm').click(function () {

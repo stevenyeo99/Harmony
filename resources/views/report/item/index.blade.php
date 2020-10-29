@@ -7,10 +7,18 @@
                 <div class="card-header">
                     <span>{{ $title }}</span>
 
+                    <a id="previousUrlModal" class="btn-info btn-sm btn float-right" href="{{ url()->previous() }}"><i class="fa fa-arrow-left"></i> Kembali</a>
                 </div>
 
                 <div class="card-body">
                     {{ Form::open(array('url' => route('manage.report.generateItemTransactionReport'), 'method' => 'POST', 'id' => 'frm')) }}
+                    <div class="form-group form-inline">
+                        {{ Form::label('itdt_id', 'Item: ', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
+
+                        <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
+                            {{ Form::select('itdt_id', $ddlItemDetails, old('itdt_id'), array('class' => 'form-control w-100 ddlChosen')) }}
+                        </div>
+                    </div>
 
                     <div class="form-group form-inline">
                         {{ Form::label('date_from', 'Tanggal dari: ', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
@@ -30,7 +38,9 @@
 
                     <div class="form-group form-inline text-right">
                         <div class="col-sm-12">
-                            {{ Form::button('Export', array('class' => 'btn btn-dark', 'id' => 'btnSave', 'data-toggle' => 'modal', 'data-target' => '#confirmModal')) }}
+                            <button id="btnExport" class="btn btn-primary glowing-button" type="button">
+                                <i class="fa fa-file-alt"></i> Export
+                            </button>
                         </div>
                     </div>
                     {{ Form::close() }}

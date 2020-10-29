@@ -95,7 +95,7 @@
             Laporan
         </div>
 
-        <li class="nav-item {{ isset($transactionReportActive) ? $itemActransactionReportActivetive : ''}}">
+        <li class="nav-item {{ isset($transactionReportActive) ? $transactionReportActive : ''}}">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseItem2" aria-expanded="true" aria-controls="collapseItem2">
                 <i class="fas fa-chart-line"></i>
                 <span>Transaksi</span>
@@ -107,7 +107,7 @@
                         Item
                     </a>
                     
-                    <a class="collapse-item {{ isset($transactionPOReportActive) ? $transactionPOReportActive : ''}}" href="{{ route('manage.report.purchaseReportIndex') }}">
+                    <a class="collapse-item {{ isset($transactionPurchaseReportActive) ? $transactionPurchaseReportActive : ''}}" href="{{ route('manage.report.purchaseReportIndex') }}">
                         Pembelian
                     </a>
 
