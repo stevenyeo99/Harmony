@@ -17,10 +17,10 @@
         
         <div class="container">
             <center>
-                <div style="border: 2px solid #337ab7;">
+                <div style="border-top: 5px double #337ab7; border-bottom: 5px double #337ab7; border-left: 3px solid #337ab7; border-right: 3px solid #337ab7;">
                     <h1 class="text-center text-primary pr-1" 
                     style="text-decoration: underline;">
-                        <img src="./img/kasir.png" style="width: 50px;">Harmony-Market
+                        <img src="./img/kasir.png" style="width: 50px;">HARMONY MARKET
                     </h1>
 
                     <p>
