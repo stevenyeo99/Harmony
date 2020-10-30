@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="card-body">
-                    {{ Form::open(array('url' => route('manage.report.generatePurchaseTransactionReport'), 'method' => 'POST', 'id' => 'frm')) }}
+                    {{ Form::open(array('url' => route('manage.report.generateInvoiceTransactionReport'), 'method' => 'POST', 'id' => 'frm')) }}
                         <div class="form-group form-inline">
                             {{ Form::label('date_from', 'Tanggal dari: ', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 

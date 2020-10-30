@@ -7,6 +7,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\HsItemDetail;
 use App\Models\HsItemStockLog;
+use App\Models\HsPurchase;
+use App\Models\HsInvoice;
 use App\Enums\StatusType;
 use App\Enums\ChangeType;
 use Illuminate\Support\Facades\Input;
@@ -118,12 +120,31 @@ class HsReportController extends MasterController {
     public function generatePurchaseTransactionReport(Request $request) {
         $data = Input::all();
 
+        $date_from = $data['date_from'];
+        $date_to = $data['date_to'];
+
         set_time_limit(300);
 
-        $purchaseListObj = [];
+        $listOfHsPurchase = HsPurchase::where('status', StatusType::ACTIVE)
+            ->whereDate('purchase_datetime', '>=', $date_from)
+            ->whereDate('purchase_datetime', '<=', $date_to)
+            ->whereNotNull('po_no')
+            ->get();
+        
+        // data each purchase log
+        $dataExist = false;
+        if (count($listOfHsPurchase) > 0) {
+            $dataExist = true;
+        }
 
-        $pdf = PDF::loadview('report.purchase.template', ['purchaseListObj' => $purchaseListObj]);
-        return $pdf->download('pembelian.pdf');
+        $pdf = PDF::loadview('report.purchase.template', [
+                'listOfHsPurchase' => $listOfHsPurchase,
+                'date_from' => $date_from,
+                'date_to' => $date_to,
+                'dataExist' => $dataExist,
+            ])->setPaper('A4', 'landscape');
+
+        return $pdf->download(Carbon::parse(now())->format('yymd') . '_transaksi_pembelian.pdf');
     }
 
     /**
@@ -136,7 +157,7 @@ class HsReportController extends MasterController {
 
         $title = $this->getTitle("report_transaction_invoice");
         
-        return view('report.purchase.index', compact('transactionReportActive', 'transactionInvoiceReportActive', 'title'));
+        return view('report.invoice.index', compact('transactionReportActive', 'transactionInvoiceReportActive', 'title'));
     }
 
     /**
@@ -145,11 +166,30 @@ class HsReportController extends MasterController {
     public function generateInvoiceTransactionReport(Request $request) {
         $data = Input::all();
 
+        $date_from = $data['date_from'];
+        $date_to = $data['date_to'];
+
         set_time_limit(300);
 
-        $invoiceListObj = [];
+        $listOfHsInvoice = HsInvoice::where('status', StatusType::ACTIVE)
+            ->whereDate('invoice_datetime', '>=', $date_from)
+            ->whereDate('invoice_datetime', '<=', $date_to)
+            ->whereNotNull('invoice_no')
+            ->get();
 
-        $pdf = PDF::loadview('report.invoice.template', ['invoiceListObj' => $invoiceListObj]);
-        return $pdf->download('penjualan.pdf');
+        // data each invoice log
+        $dataExist = false;
+        if (count($listOfHsInvoice) > 0) {
+            $dataExist = true;
+        }
+        
+        $pdf = PDF::loadview('report.invoice.template', [
+            'listOfHsInvoice' => $listOfHsInvoice,
+            'date_from' => $date_from,
+            'date_to' => $date_to,
+            'dataExist' => $dataExist,
+        ])->setPaper('A4', 'landscape');
+
+        return $pdf->download(Carbon::parse(now())->format('yymd') . '_transaksi_penjualan.pdf');
     }
 }

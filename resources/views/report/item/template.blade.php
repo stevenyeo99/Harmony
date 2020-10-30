@@ -5,16 +5,9 @@
         <meta charset="UTF-8">
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-        <style>
-            tbody {
-                display: table-row-group;
-            }
-        </style>
     </head>
 
-    <body>
-        
+    <body> 
         <div class="container">
             <center>
                 <div style="border-top: 5px double #337ab7; border-bottom: 5px double #337ab7; border-left: 3px solid #337ab7; border-right: 3px solid #337ab7;">
@@ -26,7 +19,7 @@
                     <p>
                         Laporan Transaksi Item
                         <br>
-                        Periode: {{ \Carbon\Carbon::parse($date_from)->format('m/d/yy') }} s/d {{ \Carbon\Carbon::parse($date_to)->format('m/d/yy') }}
+                        Periode: {{ \Carbon\Carbon::parse($date_from)->format('m/d/yy') }} - {{ \Carbon\Carbon::parse($date_to)->format('m/d/yy') }}
                     </p>
                 </div>
 
@@ -64,7 +57,7 @@
                     </tr>
                 </table>
             @else
-                @php $i = 1 @endphp
+                @php $i=1; @endphp
                 @foreach ($listOfHsItemDetail as $itemObj)
                     <table class="table-bordered table w-100" style="@if($i > 1) page-break-before: always; @endif">
                         <tbody>
@@ -137,7 +130,7 @@
                             @endif
                         </tbody>
                     </table>
-                    @php $i++ @endphp
+                    @php $i++; @endphp
                 @endforeach
             @endif
             

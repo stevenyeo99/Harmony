@@ -368,8 +368,16 @@ class HsInvoiceController extends MasterController {
 
         set_time_limit(300);
         
+        $height = 350;
+        // default index 2
+        for ($i = 0; $i < count($invoiceObj->hsInvoiceDetail); $i++) {
+            if ($i >= 2) {
+                $height += 30;
+            }
+        }
+
         $pdf = PDF::loadview('invoice.receipt', ['invoiceObj' => $invoiceObj])
-        ->setPaper(array(0,0,204,350), 'portrait');
+        ->setPaper(array(0,0,204,$height), 'portrait');
         return $pdf->stream('file.pdf');
     }
 
