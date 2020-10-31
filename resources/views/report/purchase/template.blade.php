@@ -119,9 +119,24 @@
                     </table>
                     @php $i++ @endphp
                 @endforeach
+
+                <!-- this applied when more then one invoice -->
+                @if ($i > 1)
+                    <table class="table-bordered table w-100">
+                        <tr>
+                            <td colspan="4" class="text-center bg-success text-white">
+                                Sub-Total keseluruhan Pembelian :
+                            </td>
+
+                            <td style="text-align: right; font-weight: bold; color: green;">
+                                RP. {{ number_format($subTotalPO, 2) }}
+                            </td>
+                        </tr>
+                    </table>
+                @endif 
             @endif
         
-            <div style="position: absolute; bottom: 10; margin-right: 30px;">
+            <div style="position: absolute; height: 60px; bottom: 10; margin-right: 30px;">
                 <h5 style="text-align: right;">______________________</h5>
                 <h5 style="text-align: right; margin-right: 41px;">(Harmony)</h5>
                 <h5 style="text-align: right; margin-right: 46px;">Manager</h5>

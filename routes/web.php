@@ -156,4 +156,4 @@ Route::prefix('/manage_report')->group(function() {
 
 // home routing
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/gettingJsonSellBuyView', 'HomeController@gettingJsonSellBuyView');
+Route::get('/gettingJsonSellBuyView', 'HomeController@gettingJsonSellBuyView')->name('line_chart_json');

@@ -370,6 +370,7 @@ class HsInvoiceController extends MasterController {
         
         $height = 350;
         // default index 2
+        // Algorithm for receipt paper height
         for ($i = 0; $i < count($invoiceObj->hsInvoiceDetail); $i++) {
             if ($i >= 2) {
                 $height += 30;

@@ -11,8 +11,8 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href="index.html">
+    <li class="nav-item {{ isset($homeActive) ? $homeActive : '' }}">
+        <a class="nav-link" href="{{ route('home') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Beranda</span>
         </a>
@@ -34,7 +34,7 @@
         </a>
     </li>
 
-    @if(Gate::allows('is-admin'))
+    @if (Gate::allows('is-admin') || Gate::allows('is-boss'))
         <li class="nav-item {{ isset($purchaseActive) ? $purchaseActive : '' }}">
             <a class="nav-link" href="{{ route('manage.purchase') }}">
                 <i class="fas fa-shopping-cart"></i>
@@ -43,7 +43,7 @@
         </li>
     @endif
 
-    @if(Gate::allows('is-admin'))
+    @if(Gate::allows('is-admin') || Gate::allows('is-boss'))
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -86,7 +86,7 @@
 
     
 
-    @if(Gate::allows('is-admin'))
+    @if(Gate::allows('is-admin') || Gate::allows('is-boss'))
         <!-- Divider -->
         <hr class="sidebar-divider">
 

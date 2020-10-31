@@ -131,6 +131,13 @@ class HsReportController extends MasterController {
             ->whereNotNull('po_no')
             ->get();
         
+        $subTotalPO = HsPurchase::where('status', StatusType::ACTIVE)
+            ->whereDate('purchase_datetime', '>=', $date_from)
+            ->whereDate('purchase_datetime', '<=', $date_to)
+            ->whereNotNull('po_no')
+            ->selectRaw('SUM(sub_total) AS sub_total')
+            ->first();
+        
         // data each purchase log
         $dataExist = false;
         if (count($listOfHsPurchase) > 0) {
@@ -142,6 +149,7 @@ class HsReportController extends MasterController {
                 'date_from' => $date_from,
                 'date_to' => $date_to,
                 'dataExist' => $dataExist,
+                'subTotalPO' => $subTotalPO->sub_total,
             ])->setPaper('A4', 'landscape');
 
         return $pdf->download(Carbon::parse(now())->format('yymd') . '_transaksi_pembelian.pdf');
@@ -177,6 +185,13 @@ class HsReportController extends MasterController {
             ->whereNotNull('invoice_no')
             ->get();
 
+        $subTotalIV = HsInvoice::where('status', StatusType::ACTIVE)
+            ->whereDate('invoice_datetime', '>=', $date_from)
+            ->whereDate('invoice_datetime', '<=', $date_to)
+            ->whereNotNull('invoice_no')
+            ->selectRaw('SUM(sub_total) AS sub_total')
+            ->first();
+
         // data each invoice log
         $dataExist = false;
         if (count($listOfHsInvoice) > 0) {
@@ -188,6 +203,7 @@ class HsReportController extends MasterController {
             'date_from' => $date_from,
             'date_to' => $date_to,
             'dataExist' => $dataExist,
+            'subTotalIV' => $subTotalIV->sub_total,
         ])->setPaper('A4', 'landscape');
 
         return $pdf->download(Carbon::parse(now())->format('yymd') . '_transaksi_penjualan.pdf');
