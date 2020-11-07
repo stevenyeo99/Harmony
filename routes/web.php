@@ -34,7 +34,7 @@ Route::prefix('/manage_user')->group(function() {
     Route::post('/save_profile', 'HsUserController@saveProfile')->name('manage.user.save_profile');
 
     // manage admin route
-    Route::group(['middleware' => 'can:is-admin'], function() {
+    Route::group(['middleware' => 'can:is-boss'], function() {
         Route::get('/', 'HsUserController@index')->name('manage.user');
         Route::get('/list', 'HsUserController@displayData')->name('manage.user.list');
         Route::get('/create', 'HsUserController@create')->name('manage.user.create');

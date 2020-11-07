@@ -89,7 +89,7 @@
                     @if (isset($invoiceObj->invoice_no))
                         <div class="form-group form-inline text-right">
                             <div class="col-sm-12">
-                                <a href="{{ route('manage.invoice.generateReceipt', $invoiceObj->invc_id) }}" class='btn btn-danger'>Demo Receipt</a>
+                                <button onclick="fnOpenPopUpWindow('View Receipt', '{{ route('manage.invoice.generateReceipt', $invoiceObj->invc_id) }}')" class='btn btn-success'>Lihat Struk</button>
                             </div>
                         </div>
                     @endif

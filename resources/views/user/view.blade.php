@@ -34,6 +34,14 @@
                         {{ Form::text('phone', $userObj->phone, array('class' => 'form-control w-100', 'maxlength' => '50', 'readonly' => 'true')) }}
                     </div>
                 </div>
+
+                <div class="form-group form-inline">
+                    {{ Form::label('is_admin', 'Jabatan :', array('class' => 'col-sm-2 d-inline-block pl-0')) }}
+
+                    <div class="col-sm-10 pl-0">
+                        {{ Form::select('is_admin', $ddlUserType, $userObj->is_admin, array('class' => 'form-control w-100', 'maxlength' => 15, 'disabled' => true)) }}
+                    </div>
+                </div>
                 
                 <div class="form-group form-inline">
                     {{ Form::label('status', 'Status :', array('class' => 'col-sm-2 d-inline-block pl-0')) }}

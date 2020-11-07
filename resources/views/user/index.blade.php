@@ -19,6 +19,7 @@
                                         <!-- <th>No.</th> -->
                                         <th class="text-center bg-primary text-white">User Name</th>
                                         <th class="text-center bg-primary text-white">Email</th>
+                                        <th class="text-center bg-primary text-white">Jabatan</th>
                                         <th class="text-center bg-primary text-white">Status</th>
                                         <th class="text-center bg-primary text-white">Aksi</th>
                                     </tr>
@@ -33,7 +34,11 @@
                                         </td>
 
                                         <td class="bg-primary text-white">
-                                            {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '2')) }}
+                                            {{ Form::select('is_admin', $ddlUserType, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '2')) }}
+                                        </td>
+
+                                        <td class="bg-primary text-white">
+                                            {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '3')) }}
                                         </td>
 
                                         <td class="bg-primary text-white"></td>
@@ -66,6 +71,7 @@
                 columns: [
                     { data: 'user_name', name: 'user_name' },
                     { data: 'email', name: 'email' },
+                    { data: 'is_admin', name: 'is_admin' },
                     { data: 'status', name: 'status'},
                     { data: 'action', name: 'action', orderable: false, searchable: false, width: '20%' }
                 ],
@@ -94,7 +100,8 @@
             });
 
             // by default search active first when first enter
-            dtTable.column(2).search("ACTIVE").draw();
+            dtTable.column(2).search("YES").draw();
+            dtTable.column(3).search("ACTIVE").draw();
         }
     </script>
 @endpush

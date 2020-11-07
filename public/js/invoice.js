@@ -164,7 +164,7 @@ function setSubTotalInvoiceItem() {
 
     $('#invoice_sub_total').val(getPriceFormattedNumber(subTotal, 2));
 
-    calculationReturnAmount();
+    $('#paid_amt').change();
 }
 
 function calculationReturnAmount() {

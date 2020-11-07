@@ -87,7 +87,9 @@ class HsUserController extends MasterController {
 
         $ddlStatus = StatusType::getStrings();
 
-        return view('user.index', compact('title', 'ddlStatus', 'userActive'));
+        $ddlUserType = UserType::getDdlUserType();
+
+        return view('user.index', compact('title', 'ddlStatus', 'userActive', 'ddlUserType'));
     }
 
     /**
@@ -95,8 +97,8 @@ class HsUserController extends MasterController {
      */
     public function displayData(Request $request) {
         $rsUser = auth()->user()
-            ->where('is_admin', '!=', UserType::IsAdmin)
-            ->select(['user_id', 'user_name', 'email', 'status']);
+            ->where('is_admin', '!=', UserType::Boss)
+            ->select(['user_id', 'user_name', 'email', 'is_admin', 'status']);
     
         return Datatables::of($rsUser)
             ->addColumn('action', function ($user) {
@@ -105,6 +107,15 @@ class HsUserController extends MasterController {
                 $btn .= " <button class='btn btn-danger btn-sm dlt-btn' onclick='trigDeleteModalBtn(\"".$this->getRoute("delete", $user->user_id)."\");'>Hapus</button>";
 
                 return $btn;
+            })
+            ->editColumn('is_admin', function($user) {
+                $label = "<span class='badge badge-success'>Admin</span>";
+
+                if ($user->is_admin == 'NO') {
+                    $label = "<span class='badge badge-warning'>Staff</span>";
+                }
+
+                return $label;
             })
             ->editColumn('status', function($user) {
                 $label = "<span class='badge badge-success'>".$user->status."</span>";
@@ -118,7 +129,7 @@ class HsUserController extends MasterController {
             ->filterColumn('status', function($query, $keyword) {
                 $query->where('status', $keyword);
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'is_admin', 'status'])
             ->make(true);
     }
 
@@ -130,7 +141,9 @@ class HsUserController extends MasterController {
 
         $userActive = "active";
 
-        return view('user.create', compact('title', 'userActive'));
+        $ddlUserType = UserType::getDdlUserType();
+
+        return view('user.create', compact('title', 'userActive', 'ddlUserType'));
     }
 
     /**
@@ -150,7 +163,7 @@ class HsUserController extends MasterController {
                 $hsUser->phone = $data['phone'];
                 $hsUser->password = Hash::make($data['password']);
                 $hsUser->created_by = Auth()->user()->user_id;
-                $hsUser->is_admin = UserType::NoAdmin;
+                $hsUser->is_admin = $data['is_admin'];
                 $hsUser->status = StatusType::ACTIVE;
                 $hsUser->created_at = now();
 
@@ -180,7 +193,9 @@ class HsUserController extends MasterController {
 
         $userActive = "active";
 
-        return view('user.edit', compact('title', 'userObj', 'userActive'));
+        $ddlUserType = UserType::getDdlUserType();
+
+        return view('user.edit', compact('title', 'userObj', 'userActive', 'ddlUserType'));
     }
 
     /**
@@ -203,6 +218,7 @@ class HsUserController extends MasterController {
                 $hsUser->phone = $data['phone'];
                 $hsUser->password = Hash::make($data['password']);
                 $hsUser->status = StatusType::ACTIVE;
+                $hsUser->is_admin = $data['is_admin'];
                 $hsUser->updated_by = Auth()->user()->user_id;
                 $hsUser->updated_at = now();
                 $hsUser->save();
@@ -251,7 +267,9 @@ class HsUserController extends MasterController {
 
         $userActive = "active";
 
-        return view('user.view', compact('title', 'userObj', 'userActive'));
+        $ddlUserType = UserType::getDdlUserType();
+
+        return view('user.view', compact('title', 'userObj', 'userActive', 'ddlUserType'));
     }
 
     /**
