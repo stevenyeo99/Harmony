@@ -17,10 +17,10 @@
     function setPlatformForWaPage() {
         if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             console.log("Mobile");
-            $("a#waContact").attr("href", "https://wa.me/6281372647955?text=Halo Harmony Support");
+            $("a#waContact").attr("href", "https://wa.me/6281378099317?text=Halo Harmony Support");
         } else {
             console.log("Website");
-            $("a#waContact").attr("href", "https://web.whatsapp.com/send?phone=6281372647955&&text=Halo Harmony Support");
+            $("a#waContact").attr("href", "https://web.whatsapp.com/send?phone=6281378099317&&text=Halo Harmony Support");
         }
     }
 </script>

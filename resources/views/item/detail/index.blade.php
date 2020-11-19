@@ -19,7 +19,7 @@
                             <thead>
                                 @if ($count > 0)
                                     <tr>
-                                        <th class="text-center bg-primary text-white" colspan="5">
+                                        <th class="text-center bg-primary text-white" colspan="6">
                                             <a href="{!! route('manage.item.detail.exportItemReport') !!}" class="btn btn-light float-right">
                                                 <i class="fa fa-file-alt"></i> Cetak
                                             </a>
@@ -30,6 +30,7 @@
                                 <tr role="row">
                                     <th class="text-center bg-primary text-white">Kode</th>
                                     <th class="text-center bg-primary text-white">Nama</th>
+                                    <th class="text-center bg-primary text-white">Supplier</th>
                                     <th class="text-center bg-primary text-white">Kategori</th>
                                     <th class="text-center bg-primary text-white">Status</th>
                                     <th class="text-center bg-primary text-white">Aksi</th>
@@ -45,11 +46,15 @@
                                     </td>
 
                                     <td class="bg-primary text-white">
-                                        {{ Form::select('itcg_id', $listOfItemCategory, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '2')) }}
+                                        {{ Form::select('splr_id', $listOfSupplier, null, array('id' => 'splr_id', 'class' => 'w-100 form-control select-filter', 'data-column' => '2')) }}
                                     </td>
 
                                     <td class="bg-primary text-white">
-                                        {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '3')) }}
+                                        {{ Form::select('itcg_id', $listOfItemCategory, null, array('id' => 'itcg_id', 'class' => 'w-100 form-control select-filter', 'data-column' => '3')) }}
+                                    </td>
+
+                                    <td class="bg-primary text-white">
+                                        {{ Form::select('status', $ddlStatus, null, array('class' => 'w-100 form-control select-filter', 'data-column' => '4')) }}
                                     </td>
 
                                     <td class="bg-primary text-white"></td> 
@@ -79,8 +84,9 @@
                 columns: [
                     { data: 'code', name: 'code', width: '10%' },
                     { data: 'name', name: 'name', width: '20%' },
-                    { data: 'itcg_id', name: 'itcg_id', width: '15%' },
-                    { data: 'status', name: 'status', width: '17%' },
+                    { data: 'splr_id', name: 'splr_id', width: '12%' },
+                    { data: 'itcg_id', name: 'itcg_id', width: '10%' },
+                    { data: 'status', name: 'status', width: '10%' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, width: '20%' },
                 ],
                 responsive: true,
@@ -102,7 +108,9 @@
             });
 
             // by default search active first when first enter
-            dtTable.column(3).search("ACTIVE").draw();
+            dtTable.column(2).search($('#splr_id').children('option:selected').val()).draw();
+            dtTable.column(3).search($('#itcg_id').children('option:selected').val()).draw();
+            dtTable.column(4).search("ACTIVE").draw();
         }
     </script>
 @endpush

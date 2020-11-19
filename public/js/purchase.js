@@ -197,7 +197,7 @@ function setSubTotalEachItemDetail() {
             for (var index in globalItemDetailList) {
                 if (itdt_id === globalItemDetailList[index].itdt_id) {
                     var price = parseFloat(globalItemDetailList[index].price);
-                    var currentQty = parseFloat(element.val());
+                    var currentQty = parseFloat(removeNumberFormat(element.val()));
                     
                     var subTotal = getPriceFormattedNumber(price * currentQty, 2);
 

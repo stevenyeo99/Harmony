@@ -40,9 +40,13 @@ class HsItemDetailController extends MasterController {
 
         $listOfItemCategory = $itemCategoryModel->getItemCategory();
 
+        $supplierModel = new HsSupplier();
+
+        $listOfSupplier = $supplierModel->getSupplier();
+
         $count = count(HsItemDetail::where('status', StatusType::ACTIVE)->get());
 
-        return view('item.detail.index', compact('title', 'itemActive', 'itemDetailActive', 'ddlStatus', 'listOfItemCategory', 'count'));
+        return view('item.detail.index', compact('title', 'itemActive', 'itemDetailActive', 'ddlStatus', 'listOfItemCategory', 'count', 'listOfSupplier'));
     }
 
     /**
@@ -50,7 +54,8 @@ class HsItemDetailController extends MasterController {
      */
     public function displayData() {
         $rsItemDetail = HsItemDetail::join('hs_item_category', 'hs_item_category.itcg_id', '=', 'hs_item_detail.itcg_id')
-        ->select(['itdt_id', 'hs_item_detail.code', 'hs_item_detail.name', 'hs_item_detail.itcg_id', 'hs_item_category.name as category_name', 'hs_item_detail.status']);
+        ->join('hs_supplier', 'hs_supplier.splr_id', '=', 'hs_item_detail.splr_id')
+        ->select(['itdt_id', 'hs_item_detail.code', 'hs_item_detail.name', 'hs_item_detail.splr_id', 'hs_supplier.name as supplier_name', 'hs_item_detail.itcg_id', 'hs_item_category.name as category_name', 'hs_item_detail.status']);
 
         return DataTables::of($rsItemDetail)
             ->addColumn('action', function($itemDetail) {
@@ -71,6 +76,9 @@ class HsItemDetailController extends MasterController {
                 }
 
                 return $label;
+            })
+            ->editColumn('splr_id', function($itemDetail) {
+                return $itemDetail->supplier_name;
             })
             ->editColumn('itcg_id', function($itemDetail) {
                 return $itemDetail->category_name;
@@ -493,6 +501,8 @@ class HsItemDetailController extends MasterController {
                         $row->setValignment('center');
                     });
 
+                    $fromToBorder = 'A1:I'.($count+1);
+
                     // algorithm to set color for item quantity minus
                     $index = 2;
                     foreach ($result_array as $data) {
@@ -504,8 +514,32 @@ class HsItemDetailController extends MasterController {
                         $index++;
                     }
 
+                    $sheet->cell('A2:A' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('B2:B' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('C2:C' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('D2:D' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('E2:E' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
                     $sheet->cell('F2:F'. ($count + 1), function($cell) {
                         $cell->setAlignment('right');
+                    });
+
+                    $sheet->cell('G2:G' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
                     });
 
                     $sheet->cell('H2:H' . ($count + 1), function($cell) {
@@ -517,7 +551,17 @@ class HsItemDetailController extends MasterController {
                     });
 
                     // Freeze first row
-                    $sheet->freezeFirstRow();
+                    // $sheet->freezeFirstRow();
+
+                    $styleArray = array(
+                        'borders' => array(
+                            'allborders' => array(
+                            'style' => 'thin'
+                            )
+                        )
+                    );
+
+                    $sheet->getStyle($fromToBorder)->applyFromArray($styleArray);
                 });
             })->export('xlsx');
         }

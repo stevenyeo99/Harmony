@@ -305,8 +305,72 @@ class HsSupplierController extends MasterController
                         $row->setValignment('center');
                     });
 
+                    $fromToBorder = 'A1:M'.($count+1);
+
+                    $sheet->cell('A2:A' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('B2:B' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('C2:C' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('D2:D' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('E2:E' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('F2:F' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('G2:G' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('H2:H' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('I2:I' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('J2:J' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('K2:K' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('L2:L' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
+                    $sheet->cell('M2:M' . ($count + 1), function($cell) {
+                        $cell->setAlignment('center');
+                    });
+
                     // Freeze first row
-                    $sheet->freezeFirstRow();
+                    // $sheet->freezeFirstRow();
+
+                    $styleArray = array(
+                        'borders' => array(
+                            'allborders' => array(
+                            'style' => 'thin'
+                            )
+                        )
+                    );
+
+                    $sheet->getStyle($fromToBorder)->applyFromArray($styleArray);
                 });
             })->export('xlsx');
         }

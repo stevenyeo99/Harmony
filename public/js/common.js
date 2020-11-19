@@ -78,9 +78,10 @@ function isNumberPercentage(event, currentInputEntry) {
 function bindAmountOnChange() {
     $('.harmonyAmountInput').change(function () {
         var thisInputAmount = $(this);
-        if (thisInputAmount.val().trim() === '.') {
+        if (thisInputAmount.val().trim() === '.' || thisInputAmount.val().trim() === '') {
             thisInputAmount.val('0.00');
         }
+
         // if empty keep the value empty
         if (thisInputAmount.val() !== '') {
             $(thisInputAmount).val(getPriceFormattedNumber(thisInputAmount.val(), 2));

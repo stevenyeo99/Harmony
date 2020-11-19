@@ -9,6 +9,7 @@ $(document).ready(function() {
     initializeDatePickerEditTransaction();
     automateTriggerPrint();
     proceedTransaction();
+    $('#return_amt').val(getPriceFormattedNumber($('#return_amt').val(), 2));
 });
 
 // used for invoice itemdetail list
@@ -78,6 +79,7 @@ function addNewRowInvoiceItemDetail() {
 
         resetInvoiceItemBodyDetails();
         initializeChosenDropdown();
+        bindAmountOnChange();
         setInvoiceItemDetailPrice();
         setSubTotalEachInvoiceItemDetail();
     });
@@ -200,7 +202,7 @@ function calculationReturnAmount() {
 /**
  * validate invoice form
  */
-function validateInvoiceForm() {
+function validateInvoiceForm(isProcess) {
     var valid = true;
 
     // validate invoice form
@@ -277,7 +279,7 @@ function validateInvoiceForm() {
         var e_pay_amt = $('#paid_amt');
         var e_sub_total = $('#invoice_sub_total');
         if (e_pay_amt.val() !== '' && e_sub_total.val() !== '') {
-            if (parseFloat(removeNumberFormat(e_pay_amt.val())) < parseFloat(removeNumberFormat(e_sub_total.val()))) {
+            if ((parseFloat(removeNumberFormat(e_pay_amt.val())) < parseFloat(removeNumberFormat(e_sub_total.val()))) && isProcess) {
                 alert('Pembayaran tidak boleh kurang dari total harga barang!');
                 scrollTo(e_pay_amt);
                 e_pay_amt.focus();
@@ -299,7 +301,7 @@ function validateInvoiceForm() {
 function submitInvoiceForm() {
     $('#btnInvoiceSave').click(function() {
         $('#txtIsProcess').val("false");
-        if (validateInvoiceForm()) {
+        if (validateInvoiceForm(false)) {
             $('#confirmModal').modal('show');
         }
     });
@@ -308,7 +310,7 @@ function submitInvoiceForm() {
 function proceedTransaction() {
     $('#btnInvoiceProcess').click(function() {
         $('#txtIsProcess').val("true");
-        if (validateInvoiceForm()) {
+        if (validateInvoiceForm(true)) {
             $('#confirmModal').modal('show');
         }
     });

@@ -9,6 +9,9 @@
         
     <body>
         <div class="container">
+            
+            <p style="text-align: left; font-weight: bold;">Tanggal Cetak: {{ \Carbon\Carbon::parse(now())->format('m/d/yy') }}</p>
+
             <center>
                 <div style="border-top: 5px double #337ab7; border-bottom: 5px double #337ab7; border-left: 3px solid #337ab7; border-right: 3px solid #337ab7;">
                     <h1 class="text-center text-primary pr-1" 
@@ -130,11 +133,16 @@
             @endif
         @endif
 
-        <div style="position: absolute; height: 60px; bottom: 10; margin-right: 30px;">
-            <h5 style="text-align: right;">______________________</h5>
-            <h5 style="text-align: right; margin-right: 41px;">(Harmony)</h5>
-            <h5 style="text-align: right; margin-right: 46px;">Manager</h5>
-        </div>
+        <table align="right">
+                <tr>
+                    <br><br><br><br><br><br><br><br>
+                    <td><h5 style="text-align: center;">______________________</h5></td>
+                </tr>
+
+                <tr>
+                    <td><h5 style="text-align: center;">(Harmony)<br>Manager</h5></td>
+                </tr>
+            </table>
     </div>
 
         <script type="text/php">

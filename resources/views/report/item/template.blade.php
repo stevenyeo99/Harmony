@@ -9,6 +9,9 @@
 
     <body> 
         <div class="container">
+            
+            <p style="text-align: left; font-weight: bold;">Tanggal Cetak: {{ \Carbon\Carbon::parse(now())->format('m/d/yy') }}</p>
+
             <center>
                 <div style="border-top: 5px double #337ab7; border-bottom: 5px double #337ab7; border-left: 3px solid #337ab7; border-right: 3px solid #337ab7;">
                     <h1 class="text-center text-primary pr-1" 
@@ -59,7 +62,7 @@
             @else
                 @php $i=1; @endphp
                 @foreach ($listOfHsItemDetail as $itemObj)
-                    <table class="table-bordered table w-100" style="@if($i > 1) page-break-before: always; @endif">
+                    <table class="table-bordered table w-100" style="margin-bottom: 0;">
                         <tbody>
                             <tr>
                                 <td colspan="6" class="bg-primary text-white" style="font-weight: bold; text-decoration: underline;">
@@ -68,27 +71,21 @@
                             </tr>
 
                             <tr>
-                                <td rowspan="2" class="text-center bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
+                                <td class="text-center bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
                                     Waktu Proses
                                 </td>
 
-                                <td colspan="3" class="text-center bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
-                                    Kuantiti
-                                </td>
+                                <td class="text-center bg-primary text-white" style="vertical-align: middle; font-weight: bold;">Sebelum</td>
+                                <td class="text-center bg-primary text-white" style="vertical-align: middle; font-weight: bold;">+/-</td>
+                                <td class="text-center bg-primary text-white" style="vertical-align: middle; font-weight: bold;">Sesudah</td>
 
-                                <td rowspan="2" class="text-center align-middle bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
+                                <td class="text-center align-middle bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
                                     Tipe Proses
                                 </td>
 
-                                <td rowspan="2" class="text-center align-middle bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
+                                <td class="text-center align-middle bg-primary text-white" style="vertical-align: middle; font-weight: bold;">
                                     Deskripsi
                                 </td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-center bg-primary text-white" style="font-weight: bold;">Sebelum</td>
-                                <td class="text-center bg-primary text-white" style="font-weight: bold;">+/-</td>
-                                <td class="text-center bg-primary text-white" style="font-weight: bold;">Sesudah</td>
                             </tr>
                             
                             @if (count($itemObj->listOfItemStockLogs) > 0)
@@ -123,6 +120,8 @@
                                         </td>
                                     </tr>
                                 @endforeach
+
+                                <br>
                             @else
                                 <tr>
                                     <td style="text-align: center" colspan="6">Tidak terdapat data pada periode ini.</td>
@@ -134,11 +133,16 @@
                 @endforeach
             @endif
             
-            <div style="position: absolute; bottom: 10; margin-right: 30px;">
-                <h5 style="text-align: right;">______________________</h5>
-                <h5 style="text-align: right; margin-right: 41px;">(Harmony)</h5>
-                <h5 style="text-align: right; margin-right: 46px;">Manager</h5>
-            </div>
+            <table align="right">
+                <tr>
+                    <br><br><br><br><br><br><br><br>
+                    <td><h5 style="text-align: center;">______________________</h5></td>
+                </tr>
+
+                <tr>
+                    <td><h5 style="text-align: center;">(Harmony)<br>Manager</h5></td>
+                </tr>
+            </table>
         </div>
 
         <script type="text/php">
