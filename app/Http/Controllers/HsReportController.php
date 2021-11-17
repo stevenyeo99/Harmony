@@ -150,6 +150,7 @@ class HsReportController extends MasterController {
                 'date_to' => $date_to,
                 'dataExist' => $dataExist,
                 'subTotalPO' => $subTotalPO->sub_total,
+                'avgTotalPO' => $subTotalPO->sub_total / count($listOfHsPurchase)
             ])->setPaper('A4', 'landscape');
 
         return $pdf->download(Carbon::parse(now())->format('yymd') . '_transaksi_pembelian.pdf');
@@ -204,6 +205,7 @@ class HsReportController extends MasterController {
             'date_to' => $date_to,
             'dataExist' => $dataExist,
             'subTotalIV' => $subTotalIV->sub_total,
+            'avgTotalIV' => $subTotalIV->sub_total / count($listOfHsInvoice)
         ])->setPaper('A4', 'landscape');
 
         return $pdf->download(Carbon::parse(now())->format('yymd') . '_transaksi_penjualan.pdf');

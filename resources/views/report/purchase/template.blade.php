@@ -135,6 +135,16 @@
                                 RP. {{ number_format($subTotalPO, 2) }}
                             </td>
                         </tr>
+
+                        <tr>
+                            <td colspan="4" class="text-center bg-info text-white">
+                                Rata-Rata keseluruhan Pembelian :
+                            </td>
+
+                            <td style="text-align: right; font-weight: bold; color: #17a2b8;">
+                                RP. {{ number_format($avgTotalPO, 2) }}
+                            </td>
+                        </tr>
                     </table>
                 @endif 
             @endif
