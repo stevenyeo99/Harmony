@@ -10,7 +10,7 @@
     <body>
         <div class="container">
             
-            <p style="text-align: left; font-weight: bold;">Tanggal Cetak: {{ \Carbon\Carbon::parse(now())->format('m/d/yy') }}</p>
+            <p style="text-align: left; font-weight: bold;">Tanggal Cetak: {{ \Carbon\Carbon::parse(now())->format('m/d/Y') }}</p>
 
             <center>
                 <div style="border-top: 5px double #337ab7; border-bottom: 5px double #337ab7; border-left: 3px solid #337ab7; border-right: 3px solid #337ab7;">
@@ -22,7 +22,7 @@
                     <p>
                         Laporan Transaksi Penjualan
                         <br>
-                        Periode: {{ \Carbon\Carbon::parse($date_from)->format('m/d/yy') }} - {{ \Carbon\Carbon::parse($date_to)->format('m/d/yy') }}
+                        Periode: {{ \Carbon\Carbon::parse($date_from)->format('m/d/Y') }} - {{ \Carbon\Carbon::parse($date_to)->format('m/d/Y') }}
                     </p>
                 </div>
 
@@ -62,7 +62,7 @@
                     <tbody>
                         <tr>
                             <td colspan="4" class="bg-primary text-white" style="font-weight: bold; text-decoration: underline;">
-                                {{ \Carbon\Carbon::parse($ivObj->invoice_datetime)->format('yy/m/d') }} - ({{ $ivObj->invoice_no }})
+                                {{ \Carbon\Carbon::parse($ivObj->invoice_datetime)->format('Y/m/d') }} - ({{ $ivObj->invoice_no }})
                             </td>
                         </tr>
 
@@ -91,7 +91,7 @@
                                 </td>
 
                                 <td style="text-align: right;">
-                                    {{ number_format($invoiceDetail->quantity, 2) }}
+                                    {{ number_format($invoiceDetail->quantity, 0) }}
                                 </td>
 
                                 <td style="text-align: right;">

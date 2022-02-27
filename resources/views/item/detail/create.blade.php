@@ -59,7 +59,7 @@
                         {{ Form::label('quantity', 'Kuantiti<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
                         
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('quantity', old('quantity') ?  old('quantity') : '1.00', array('id' => 'quantity', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
+                            {{ Form::text('quantity', old('quantity') ?  number_format(old('quantity'), 0) : '1', array('id' => 'quantity', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '21', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
                         </div>
 
                         {{ Form::label('price', 'Harga Beli<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}

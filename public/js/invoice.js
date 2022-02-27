@@ -68,7 +68,7 @@ function addNewRowInvoiceItemDetail() {
         }
 
         itemRow += "</select></td>";
-        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput harmonyAmountInput txtItemQuantity' onkeypress='return isNumberPercentage(event, $(this));'></td>";
+        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput txtItemQuantity' onkeypress='return isNumberPercentage(event, $(this));'></td>";
         itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput' readonly></td>";
         itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput' readonly></td>";
         itemRow += "<td class='text-center' style='width: 5%;'><img class='deleteItemRow' src='/img/delete.png' style='cursor: pointer; width: 2rem; height: 2rem;' onclick='deleteInvoiceRowItemDetail($(this))'></td>";

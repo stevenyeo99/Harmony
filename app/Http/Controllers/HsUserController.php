@@ -245,7 +245,7 @@ class HsUserController extends MasterController {
 
             $hsUser = HsUser::find($id);
             $hsUser->status = StatusType::INACTIVE;
-            $hsUser->user_id = Auth()->user()->user_id;
+            $hsUser->updated_by = Auth()->user()->user_id;
             $hsUser->updated_at = now();
             $hsUser->save();
 

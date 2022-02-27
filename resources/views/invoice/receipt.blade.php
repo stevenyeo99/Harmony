@@ -52,7 +52,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2" style="text-align: left;">{{ $itemDetail->quantity }} {{ $itemDetail->hsItemDetail->hsItemUom->name }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X</td>
+                                <td colspan="2" style="text-align: left;">{{ number_format($itemDetail->quantity, 0) }} {{ $itemDetail->hsItemDetail->hsItemUom->name }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X</td>
                                 <td style="text-align: right;">{{ number_format($itemDetail->price, 2) }}</td>
                                 <td style="text-align: right;">{{ number_format($itemDetail->sub_total, 2) }}</td>
                             </tr>

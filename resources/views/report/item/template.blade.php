@@ -10,7 +10,7 @@
     <body> 
         <div class="container">
             
-            <p style="text-align: left; font-weight: bold;">Tanggal Cetak: {{ \Carbon\Carbon::parse(now())->format('m/d/yy') }}</p>
+            <p style="text-align: left; font-weight: bold;">Tanggal Cetak: {{ \Carbon\Carbon::parse(now())->format('m/d/Y') }}</p>
 
             <center>
                 <div style="border-top: 5px double #337ab7; border-bottom: 5px double #337ab7; border-left: 3px solid #337ab7; border-right: 3px solid #337ab7;">
@@ -22,7 +22,7 @@
                     <p>
                         Laporan Transaksi Item
                         <br>
-                        Periode: {{ \Carbon\Carbon::parse($date_from)->format('m/d/yy') }} - {{ \Carbon\Carbon::parse($date_to)->format('m/d/yy') }}
+                        Periode: {{ \Carbon\Carbon::parse($date_from)->format('m/d/Y') }} - {{ \Carbon\Carbon::parse($date_to)->format('m/d/Y') }}
                     </p>
                 </div>
 
@@ -92,23 +92,23 @@
                                 @foreach ($itemObj->listOfItemStockLogs as $itemStockLog)
                                     <tr>
                                         <td style="text-align: center; width: 20%;">
-                                            {{ \Carbon\Carbon::parse($itemStockLog->change_time)->format('m/d/y h:i:s') }}
+                                            {{ \Carbon\Carbon::parse($itemStockLog->change_time)->format('m/d/Y h:i:s') }}
                                         </td>
 
                                         <td style="text-align: right; width: 10%;">
-                                            {{ number_format($itemStockLog->original_quantity, 2) }}
+                                            {{ number_format($itemStockLog->original_quantity, 0) }}
                                         </td>
 
                                         <td style="text-align: right; width: 10%;">
                                             @if ($itemStockLog->plusOrMinusQuantity == 'PLUS')
-                                                <span style="color: green;">+{{ number_format($itemStockLog->add_quantity, 2) }}</span>
+                                                <span style="color: green;">+{{ number_format($itemStockLog->add_quantity, 0) }}</span>
                                             @else 
-                                                <span style="color: red;">-{{ number_format($itemStockLog->min_quantity, 2) }}</span>
+                                                <span style="color: red;">-{{ number_format($itemStockLog->min_quantity, 0) }}</span>
                                             @endif
                                         </td>
 
                                         <td style="text-align: right; width: 10%;">
-                                            {{ number_format($itemStockLog->new_quantity, 2) }}
+                                            {{ number_format($itemStockLog->new_quantity, 0) }}
                                         </td>
 
                                         <td style="width: 15%">

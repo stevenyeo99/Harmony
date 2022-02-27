@@ -351,19 +351,19 @@ class HsItemDetailController extends MasterController {
 
         return DataTables::of($rsItemStock)
             ->addColumn('before', function($itemStock) {
-                return $itemStock->original_quantity;
+                return number_format($itemStock->original_quantity, 0);
             })
             ->addColumn('transaction', function($itemStock) {
                 $spanQty = '<span class="text text-warning>0.00</span>';
                 if ($itemStock->add_quantity != '0.00') {
-                    $spanQty = '<span class="text text-success">+'.$itemStock->add_quantity.'</span>';
+                    $spanQty = '<span class="text text-success">+'.number_format($itemStock->add_quantity, 0).'</span>';
                 } else if ($itemStock->min_quantity != '0.00') {
-                    $spanQty = '<span class="text text-danger">-'.$itemStock->min_quantity.'</span>';
+                    $spanQty = '<span class="text text-danger">-'.number_format($itemStock->min_quantity, 0).'</span>';
                 } 
                 return $spanQty;
             })
             ->addColumn('after', function($itemStock) {
-                return $itemStock->new_quantity;
+                return number_format($itemStock->new_quantity, 0);
             })
             ->addColumn('type', function($itemStock) {
                 return $itemStock->change_type;
@@ -478,7 +478,7 @@ class HsItemDetailController extends MasterController {
                 $result_array[$key]['Deskripsi'] = $res->description;
                 $result_array[$key]['Supplier'] = $res->hsSupplier->name;
                 $result_array[$key]['Kategori'] = $res->hsItemCategory->name;
-                $result_array[$key]['Kuantiti'] = $res->quantity;
+                $result_array[$key]['Kuantiti'] = number_format($res->quantity, 0);
                 $result_array[$key]['Tipe Unit'] = $res->hsItemUom->name;
                 $result_array[$key]['Harga Beli'] = 'RP. '. $res->price;
                 $result_array[$key]['Harga Jual'] = 'RP. '. $res->net_price;

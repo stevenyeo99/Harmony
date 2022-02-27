@@ -43,7 +43,7 @@
                                         <tr>
                                             <td style="text-align: right;"></td>
                                             <td class='text-center'><input type='text' class='form-control' value='{{ $itemDetail->hsItemDetail->name }}' readonly></td>
-                                            <td class='text-center'><input type='text' class='form-control amountPercentInput harmonyAmountInput txtItemQuantity' value='{{ number_format($itemDetail->quantity, 2) }}' readonly></td>
+                                            <td class='text-center'><input type='text' class='form-control amountPercentInput harmonyAmountInput txtItemQuantity' value='{{ number_format($itemDetail->quantity, 0) }}' readonly></td>
                                             <td class='text-center'><input type='text' class='form-control amountPercentInput' value='{{ number_format($itemDetail->price, 2) }}' readonly></td>
                                             <td class='text-center'><input type='text' class='form-control amountPercentInput' value='{{ number_format($itemDetail->sub_total, 2) }}' readonly></td>
                                         </tr>

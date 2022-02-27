@@ -17,7 +17,7 @@
                             {{ Form::label('name', 'Original :', array('class' => 'col-sm-2 d-inline-block pl-0')) }}
 
                             <div class="col-sm-10 pl-0">
-                                {{ Form::text('original_quantity', $oriQuantity, array('class' => 'form-control w-100 amountPercentInput', 'maxlength' => '20', 'readonly' => true)) }}
+                                {{ Form::text('original_quantity', number_format($oriQuantity, 0), array('class' => 'form-control w-100 amountPercentInput', 'maxlength' => '20', 'readonly' => true)) }}
                             </div>
                         </div>
 
@@ -25,7 +25,7 @@
                             {{ Form::label('name', 'Baru<span class="text-danger">*</span> :', array('class' => 'col-sm-2 d-inline-block pl-0'), false) }}
 
                             <div class="col-sm-10 pl-0">
-                                {{ Form::text('new_quantity', old('new_quantity'), array('class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '20', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
+                                {{ Form::text('new_quantity', old('new_quantity'), array('class' => 'form-control w-100 amountPercentInput', 'maxlength' => '20', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
                             </div>
                         </div>
 
