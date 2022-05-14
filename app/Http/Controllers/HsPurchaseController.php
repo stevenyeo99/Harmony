@@ -9,6 +9,7 @@ use App\Models\HsPurchaseLog;
 use App\Models\HsItemDetail;
 use App\Models\HsSupplier;
 use App\Models\HsItemStockLog;
+use App\Models\HsAverageItemPrice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Yajra\Datatables\Datatables;
@@ -285,6 +286,27 @@ class HsPurchaseController extends MasterController {
             $hsItemStockLogs = [];
             $hsPurchaseDetails = HsPurchaseDetail::where('prch_id', $hsPurchase->prch_id)->get();
             foreach ($hsPurchaseDetails as $hsPurchaseDetail) {
+                
+                // 4. average the item price rules
+                // re-save and calculate the item price and net price
+                $hsAverageItemPrice = new HsAverageItemPrice();
+                $hsAverageItemPrice->itdt_id = $hsPurchaseDetail->itdt_id;
+                $hsAverageItemPrice->quantity = $hsPurchaseDetail->quantity;
+                $hsAverageItemPrice->price = $hsPurchaseDetail->price;
+                $hsAverageItemPrice->total_price = $hsPurchaseDetail->sub_total;
+                $hsAverageItemPrice->created_at = now();
+                $hsAverageItemPrice->save();
+
+                $rsAvg = HsAverageItemPrice::where('itdt_id', $hsAverageItemPrice->itdt_id)
+                    ->selectRaw("sum(price) as sumPrice, count(*) as total")
+                    ->first();
+                $avgPrice = $rsAvg["sumPrice"] / $rsAvg["total"];
+
+                $hsItemDetail = HsItemDetail::find($hsAverageItemPrice->itdt_id);
+                $hsItemDetail->price = $avgPrice;
+                $hsItemDetail->net_price = $avgPrice + ($avgPrice * ($hsItemDetail->net_pct / 100));
+                $hsItemDetail->save(); 
+
                 $originalQuantity = $hsPurchaseDetail->hsItemDetail->quantity;
                 if (!isset($originalQuantity)) {
                     $originalQuantity = '0.00';

@@ -75,9 +75,9 @@
                                                     @endforeach
                                                 </select>
                                             </td>
-                                            <td class='text-center'><input type='text' class='form-control amountPercentInput txtItemQuantity' value='{{ number_format($itemDetail->quantity, 0) }}'></td>
-                                            <td class='text-center'><input type='text' class='form-control amountPercentInput' value='{{ number_format($itemDetail->price, 2) }}' readonly></td>
-                                            <td class='text-center'><input type='text' class='form-control amountPercentInput' value='{{ number_format($itemDetail->sub_total, 2) }}' readonly></td>
+                                            <td class='text-center'><input type='text' class='form-control amountPercentInput txtPoQuantity' value='{{ number_format($itemDetail->quantity, 0) }}' onkeypress='return isNumberPercentage(event, $(this))'></td>
+                                            <td class='text-center'><input type='text' class='form-control amountPercentInput txtItemPrice harmonyAmountInput' value='{{ number_format($itemDetail->price, 2) }}' onkeypress='return isNumberPlusComma(event, $(this))'></td>
+                                            <td class='text-center'><input type='text' class='form-control amountPercentInput txtItemTotalPrice' value='{{ number_format($itemDetail->sub_total, 2) }}' readonly></td>
                                             <td class='text-center' style='width: 5%;'><img class='deleteItemRow' src='/img/delete.png' style='cursor: pointer; width: 2rem; height: 2rem;' onclick='deleteRowItemDetail($(this))'></td>
                                         </tr>
                                     @endforeach

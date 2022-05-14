@@ -54,9 +54,9 @@ function addNewRowItemDetail() {
         }
 
         itemRow += "</select></td>";
-        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput txtItemQuantity' onkeypress='return isNumberPercentage(event, $(this))'></td>";
-        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput' readonly></td>";
-        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput' readonly></td>";
+        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput txtPoQuantity' onkeypress='return isNumberPercentage(event, $(this))'></td>";
+        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput txtItemPrice harmonyAmountInput' onkeypress='return isNumberPlusComma(event, $(this))'></td>";
+        itemRow += "<td class='text-center'><input type='text' class='form-control amountPercentInput txtItemTotalPrice' readonly></td>";
         itemRow += "<td class='text-center' style='width: 5%;'><img class='deleteItemRow' src='/img/delete.png' style='cursor: pointer; width: 2rem; height: 2rem;' onclick='deleteRowItemDetail($(this))'></td>";
         itemRow += "</tr>";
 
@@ -182,22 +182,24 @@ function setItemDetailPrice() {
  * method for sub total each row purchase item
  */
 function setSubTotalEachItemDetail() {
-    $('.txtItemQuantity').change(function() {
+    $('.txtPoQuantity, .txtItemPrice').change(function () {
         var element = $(this);
 
         var currentRow = element.parent().parent();
         
         var ddlItem = currentRow.find('td:eq(1) select.ddlChosen');
+        var qtyEl = currentRow.find('td:eq(2) input.txtPoQuantity');
+        var priceEl = currentRow.find('td:eq(3) input.txtItemPrice');
 
-        var subTotalElem = currentRow.find('td:eq(4) input');
+        var subTotalElem = currentRow.find('td:eq(4) input.txtItemTotalPrice');
 
-        if (ddlItem.val() !== '') {
+        if (ddlItem.val() !== '' && qtyEl.val() !== '' && priceEl.val() !== '') {
             var itdt_id = parseInt(ddlItem.val());
 
             for (var index in globalItemDetailList) {
                 if (itdt_id === globalItemDetailList[index].itdt_id) {
-                    var price = parseFloat(globalItemDetailList[index].price);
-                    var currentQty = parseFloat(removeNumberFormat(element.val()));
+                    var price = parseFloat(removeNumberFormat(priceEl.val()));
+                    var currentQty = parseFloat(removeNumberFormat(qtyEl.val()));
                     
                     var subTotal = getPriceFormattedNumber(price * currentQty, 2);
 
@@ -206,6 +208,9 @@ function setSubTotalEachItemDetail() {
                     setSubTotalPurchaseItem();
                 }
             }
+        } else {
+            subTotalElem.val('');
+            setSubTotalPurchaseItem();
         }
     });
 }

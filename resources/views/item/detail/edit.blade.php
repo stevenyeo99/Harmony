@@ -65,7 +65,7 @@
                         {{ Form::label('price', 'Harga Beli<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('price', old('price') ?  old('price') : $itemDetailObj->price, array('id' => 'price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
+                            {{ Form::text('price', old('price') ?  number_format(old('price'), 2) : number_format($itemDetailObj->price, 2), array('id' => 'price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))')) }}
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@
                         {{ Form::label('net_price', 'Harga Jual<span class="text-danger">*</span> :', array('class' => 'col-sm-2 col-md-2 col-lg-2 d-inline-block pl-0'), false) }}
 
                         <div class="col-sm-4 col-md-4 col-lg-4 pl-0">
-                            {{ Form::text('net_price', old('net_price') ? old('net_price') : $itemDetailObj->net_price, array('id' => 'net_price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))', 'placeholder' => '0.00', 'readonly' => true)) }}
+                            {{ Form::text('net_price', old('net_price') ? number_format(old('net_price'), 2) : number_format($itemDetailObj->net_price, 2), array('id' => 'net_price', 'class' => 'form-control w-100 amountPercentInput harmonyAmountInput', 'maxlength' => '38', 'onkeypress' => 'return isNumberPlusComma(event, $(this))', 'placeholder' => '0.00', 'readonly' => true)) }}
                         </div>
                     </div>
 

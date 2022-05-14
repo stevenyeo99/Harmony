@@ -9,6 +9,7 @@ use App\Models\HsItemStockLog;
 use App\Models\HsItemCategory;
 use App\Models\HsItemUom;
 use App\Models\HsSupplier;
+use App\Models\HsAverageItemPrice;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Yajra\Datatables\Datatables;
@@ -181,6 +182,15 @@ class HsItemDetailController extends MasterController {
                 $hsItemStockLog->new_quantity = $hsItemDetail->quantity;
                 $hsItemStockLog->description = "Buat Item Baru";
                 $hsItemStockLog->save();
+
+                // HS_AVERAGE_ITEM_PRICE
+                $hsAverageItemPrice = new HsAverageItemPrice();
+                $hsAverageItemPrice->itdt_id = $hsItemDetail->itdt_id;
+                $hsAverageItemPrice->quantity = $hsItemDetail->quantity;
+                $hsAverageItemPrice->price = $hsItemDetail->price;
+                $hsAverageItemPrice->total_price = ($hsAverageItemPrice->price * $hsAverageItemPrice->quantity);
+                $hsAverageItemPrice->created_at = now();
+                $hsAverageItemPrice->save();
 
                 DB::commit();
 
